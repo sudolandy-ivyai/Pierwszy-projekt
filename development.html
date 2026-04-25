@@ -1,0 +1,605 @@
+<!DOCTYPE html> 
+<html lang="pl-PL">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proces B+R | XperiBase.com</title>
+  <meta name="description" content="Poznaj kierunki rozwoju XperiBase w ramach przyszłych programów grantowych. Ekosystem łączący inżynierię Neuron, oprogramowanie Studio i warstwę Flow.">
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;700;800;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'xb-cream': '#FDFBF7',
+            'xb-dark': '#1A1A1A',
+            'xb-grey': '#F2F0EB',
+            'xb-accent': '#3D3D3D',
+            'xb-teal': '#4FC3B8',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+        --primary-color: #4FC3B8;
+        --text-muted: #6b7280;
+    }
+
+    body { background-color: #FDFBF7; color: #1A1A1A; font-family: 'Inter', sans-serif; line-height: 1.6; margin: 0; padding: 0; overflow-x: hidden; }
+
+    /* --- FIXED HEADER --- */
+    .logo-row { 
+      position: fixed; /* Zmienione z absolute */
+      top: 0; 
+      right: 0; 
+      width: 100%; 
+      padding: 15px 40px; 
+      z-index: 100; 
+      display: flex; 
+      align-items: center; 
+      justify-content: flex-end; 
+      gap: 2rem; 
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Efekt po przewinięciu */
+    .logo-row.scrolled {
+      background: rgba(26, 26, 26, 0.85);
+      backdrop-filter: blur(12px);
+      padding: 8px 40px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-logo { height: 120px; width: auto; transition: height 0.4s ease; }
+    .logo-row.scrolled .main-logo { height: 60px; }
+
+    .hamburger-menu { background: transparent; border: none; cursor: pointer; width: 40px; height: 30px; display: flex; flex-direction: column; justify-content: space-between; z-index: 110; }
+    .hamburger-menu span { display: block; width: 100%; height: 3px; background-color: #FFFFFF; border-radius: 2px; transition: 0.3s; }
+    
+    .hamburger-menu.active span { background-color: #000; }
+    .hamburger-menu.active span:nth-child(1) { transform: translateY(13.5px) rotate(45deg); }
+    .hamburger-menu.active span:nth-child(2) { opacity: 0; }
+    .hamburger-menu.active span:nth-child(3) { transform: translateY(-13.5px) rotate(-45deg); }
+
+    .fullscreen-nav { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #F4F1EA; z-index: 105; display: block; padding: 120px 20px 40px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; }
+    .fullscreen-nav.open { opacity: 1; visibility: visible; }
+    .nav-list { list-style: none; text-align: center; width: 100%; max-width: 900px; margin: 0 auto; padding: 0; }
+    .nav-list li { margin: 20px 0; opacity: 0; transform: translateY(20px); transition: all 0.4s ease; }
+    .fullscreen-nav.open .nav-list li { opacity: 1; transform: translateY(0); }
+    .nav-list a { color: #000; text-decoration: none; font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 5vw, 3rem); }
+    .nav-list a:hover { font-style: italic; text-decoration: underline; text-underline-offset: 8px; }
+
+    @media (max-width: 600px) { 
+      .fullscreen-nav { padding: 100px 16px 30px; }
+      .nav-list li { margin: 18px 0; }
+      .main-logo { height: 70px; } 
+      .logo-row { padding: 10px 20px; justify-content: space-between; } 
+      .logo-row.scrolled .main-logo { height: 50px; }
+    }
+
+    .hero-overlay { background: linear-gradient(to bottom, rgba(26, 26, 26, 0.1) 0%, rgba(26, 26, 26, 0.4) 60%, rgba(26, 26, 26, 0.95) 100%); }
+
+    /* --- STUDIO UI --- */
+    .studio-section { background: #FDFBF7; color: #1A1A1A; }
+    .title-bar { text-align: center; margin: 0 auto 32px; max-width: 900px;}
+    .title-bar h2 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 2.5rem; letter-spacing: -1px; line-height: 1.2; }
+    .title-bar h3 { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.25rem; color: #374151; }
+    .title-bar p { color: #4b5563; font-size: 1rem; line-height: 1.5; }
+
+    .studio-outer-container { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; align-items: flex-start; width: 100%; max-width: 1600px; margin: 0 auto; }
+    .app-window { background: #111; border: 1px solid #333; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.15); overflow: hidden; display: flex; flex-direction: column; }
+    .studio-container { width: 950px; height: 850px; }
+    .studio-header { padding: 18px 25px; border-bottom: 1px solid #222; background: #1A1A1A; display: flex; justify-content: space-between; align-items: center; }
+    .logo-studio { font-family: 'Montserrat', sans-serif; font-weight: 800; color: #FDFBF7; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; }
+
+    .deploy-btn { background: #FDFBF7; color: #1A1A1A; border: none; padding: 10px 24px; border-radius: 999px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.78rem; text-transform: uppercase; }
+    .deploy-btn:hover { background: #e5e5e5; transform: translateY(-1px); }
+
+    .studio-body { display: flex; flex-grow: 1; overflow: hidden; }
+    .studio-sidebar-left { width: 230px; background: #161616; border-right: 1px solid #222; padding: 20px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+    .section-title { font-size: 0.7rem; text-transform: uppercase; color: #888; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.16em; font-family: 'Inter', sans-serif; }
+
+    .scene-item { padding: 10px; border-radius: 12px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 12px; background: #1E1E1E; color: #CCC; }
+    .scene-item.active { background: #2D2D2D; border: 1px solid #555; color: #FFF; }
+    .scene-thumb { width: 44px; height: 44px; border-radius: 8px; border: 1px solid #333; background:#222; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.7rem; color: #444; }
+
+    .studio-sidebar-right { width: 260px; background: #161616; border-left: 1px solid #222; padding: 20px; overflow-y: auto; }
+    .asset-category { margin-top: 16px; color: #888; font-size: 0.68rem; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; }
+    .asset { padding: 10px; margin-bottom: 8px; border-radius: 10px; cursor: grab; font-size: 0.8rem; border: 1px solid #333; background: #1A1A1A; color: #E0E0E0; transition: 0.2s; }
+    .asset:hover { border-color: #888; background: #252525; }
+
+    .studio-main { flex-grow: 1; padding: 25px; background: radial-gradient(circle at top, rgba(30,64,175,0.2), rgba(15,23,42,0.9) 55%, #020617 100%); display: flex; flex-direction: column; overflow-y: auto; }
+    .canvas-wrapper { background: #000; border-radius: 16px; margin-bottom: 20px; height: 350px; border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; }
+    #main-canvas-img { width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0.7; }
+
+    .sensor-point { position: absolute; width: 32px; height: 32px; background: rgba(0,0,0,0.8); border: 2px solid var(--primary-color); color: var(--primary-color); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: 800; transform: translate(-50%, -50%); transition: 0.2s; }
+    .sensor-point.selected { background: var(--primary-color); color: #000; box-shadow: 0 0 25px var(--primary-color); z-index: 20; }
+
+    .logic-builder { background: rgba(15,23,42,0.8); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
+    .logic-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+    .logic-row { display: flex; align-items: center; margin-bottom: 12px; gap: 12px; }
+    .logic-label { font-weight: 700; width: 60px; text-align: right; color: var(--text-muted); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
+    .drop-zone { flex-grow: 1; height: 44px; border: 1px dashed rgba(148,163,184,0.4); border-radius: 10px; display: flex; align-items: center; padding: 0 15px; color: var(--text-muted); font-size: 0.85rem; background: rgba(0,0,0,0.2); transition: 0.2s; }
+    .drop-zone.filled { border-style: solid; background: rgba(255,255,255,0.05); color: #fff; border-color: rgba(255,255,255,0.2); }
+
+    /* --- PHONE MOCKUP --- */
+    .ar-phone-frame { 
+      position: relative; width: 320px; aspect-ratio: 9/19; border-radius: 44px; padding: 12px; background: linear-gradient(145deg, #2a2a2a, #111); box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 0 2px 1px rgba(255,255,255,0.1), 0 0 0 4px #1a1a1a; margin: 0 auto; border: 1px solid #333;
+    }
+    .ar-phone-inner { width: 100%; height: 100%; border-radius: 32px; background: #000; overflow: hidden; position: relative; display: flex; flex-direction: column; box-shadow: inset 0 0 15px rgba(0,0,0,0.8); }
+    .ar-phone-notch { width: 40%; height: 24px; border-radius: 0 0 12px 12px; background: #1A1A1A; position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 10; border: 1px solid rgba(255,255,255,0.05); border-top: none; }
+    
+    .mobile-screen { width: 100%; height: 100%; display: none; flex-direction: column; background: #f8fafc; }
+    .mobile-screen.active { display: flex; }
+    
+    .mobile-header { height: 250px; background-size: cover; background-position: center; position: relative; }
+    .mobile-header-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 20px; color: white; }
+    .interaction-area { flex-grow: 1; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+    .touch-btn { width: 80px; height: 80px; border-radius: 50%; background: #fff; border: 3px solid var(--primary-color); display: flex; justify-content: center; align-items: center; font-size: 2rem; cursor: pointer; transition: 0.1s; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    .feedback-card { background: #fff; padding: 12px; border-radius: 12px; width: 100%; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; opacity: 0; transform: translateY(10px); transition: 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid var(--primary-color); text-align: left; font-size: 0.85rem; font-weight: 600; }
+    .feedback-card.active { opacity: 1; transform: translateY(0); }
+
+    /* --- AR VR EFFECTS --- */
+    .ar-media { flex-grow: 1; position: relative; background: #000; overflow: hidden; }
+    .ar-media img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.4s; } 
+    .ar-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.6s; z-index: 2; pointer-events: none; }
+    .ar-media video.visible { opacity: 0.8; }
+    .ar-scanline { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(to right, transparent, var(--primary-color), transparent); box-shadow: 0 0 15px var(--primary-color); z-index: 5; display: none; animation: scan 3s linear infinite; }
+    .ar-marker { position: absolute; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.4); z-index: 4; transition: border-color 0.3s; opacity: 0; }
+    .ar-hotspot { position: absolute; width: 12px; height: 12px; background: var(--primary-color); border-radius: 50%; z-index: 6; display: none; transform: translate(-50%, -50%); }
+    .ar-label { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.6rem; opacity: 1; transition: 0.3s; z-index: 10; text-transform: uppercase; white-space: nowrap; font-weight: bold; border: 1px solid rgba(79, 195, 184, 0.4); }
+    .ar-play-btn { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #FFF; background: rgba(0,0,0,0.4); color: #FFF; cursor: pointer; margin: 15px auto; display: flex; align-items: center; justify-content: center; z-index: 10; position: relative; }
+
+    @media (max-width: 1200px) { .studio-outer-container { flex-direction: column; align-items: center; } .studio-container { width: 100%; height: auto; } }
+  </style>
+</head>
+
+<body class="antialiased">
+
+  <!-- HEADER -->
+  <div class="logo-row" id="header">
+    <a href="index.html" aria-label="Start">
+      <img src="GRAPH/xperibase_blanc.png" alt="Logo XperiBase" class="main-logo">
+    </a>
+    <button class="hamburger-menu" id="menuBtn"><span></span><span></span><span></span></button>
+  </div>
+
+  <nav id="main-nav" class="fullscreen-nav">
+    <ul class="nav-list">
+      <li><a href="index.html" onclick="closeMenu()">Start</a></li>
+      <li><a href="mission.html" onclick="closeMenu()">Misja</a></li>
+      <li><a href="project.html" onclick="closeMenu()">Projekt</a></li>
+      <li><a href="development.html" onclick="closeMenu()">Proces B+R</a></li>
+      <li><a href="team.html" onclick="closeMenu()">Zespół</a></li>
+      <li><a href="gallery.html" onclick="closeMenu()">Galeria</a></li>
+      <li><a href="education.html" onclick="closeMenu()">Edukacja</a></li>
+      <li><a href="partnership.html" onclick="closeMenu()">Partnerstwo</a></li>
+      <li><a href="survey.html" onclick="closeMenu()">Twój głos</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    
+    <!-- BLOCK 1: HERO -->
+    <section class="relative min-h-[85vh] flex items-end justify-center overflow-hidden pt-32 pb-20 bg-xb-dark text-[#FDFBF7]">
+      <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+        <source src="GRAPH/spa-video.mp4" type="video/mp4">
+      </video>
+      <div class="absolute inset-0 hero-overlay z-10"></div>
+      <div class="relative z-20 container mx-auto px-6 text-center">
+        <div class="inline-block border border-gray-400 text-gray-300 px-4 py-1 rounded-full text-xs uppercase tracking-widest font-bold mb-6 backdrop-blur-sm">Roadmapa Technologiczna</div>
+        <h1 class="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 font-serif drop-shadow-lg">Ścieżka Badawczo‑Rozwojowa Projektu</h1>
+        <p class="text-lg md:text-xl max-w-4xl mx-auto font-light mb-8 text-gray-200">Projekt XperiBase to rozwój w pełni zintegrowanego ekosystemu technologicznego — łączącego rozwiązania AR, sensorykę i moduły interakcji przestrzennej.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="#studio" class="border border-[#FDFBF7] px-8 py-3 rounded-full text-sm uppercase hover:bg-white hover:text-xb-dark transition">Prototyp Studio</a>
+            <a href="#flow" class="bg-white text-xb-dark font-bold px-8 py-3 rounded-full text-sm uppercase hover:bg-gray-200 transition">Aplikacja Flow (AR)</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOCK 2: WIZJA EKOSYSTEMU -->
+    <section class="py-20 bg-xb-cream border-b border-gray-200">
+        <div class="container mx-auto px-6 max-w-6xl text-center">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6 text-xb-dark">Trzy filary przyszłych wdrożeń</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-12 max-w-4xl mx-auto">
+                Planowane prace badawczo-rozwojowe skupią się na stworzeniu <strong>Ekosystemu XperiBase</strong>, który będzie łączyć moduł sprzętowy <strong>Neuron</strong>, panel kreacyjny <strong>Studio</strong> oraz aplikację <strong>Flow</strong>, tworząc kompletną platformę do wdrażania multisensorycznych, interaktywnych doświadczeń. <strong>Hardware</strong> to mikrokomputer obsługujący czujniki, moduły wykonawcze i komunikację bezprzewodową. <strong>Software</strong> będzie składać się z dwóch uzupełniających się warstw: panelu do tworzenia doświadczeń <strong>XperiBase Studio</strong> oraz aplikacji dla odbiorców - <strong>XperiBase Flow</strong>.
+            </p>
+
+            <div class="bg-xb-grey rounded-[32px] border border-gray-200 p-8 md:p-12 shadow-sm">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-[20px] p-8 text-left border border-gray-100 shadow-sm">
+                        <div class="text-[0.65rem] font-bold uppercase text-gray-500 mb-2">1 · Hardware</div>
+                        <h4 class="text-xl font-bold mb-4">XperiBase Neuron</h4>
+                        <p class="text-sm text-gray-600">Moduł sensoryczny ukryty w obiektach. Reaguje na dotyk i zbliżenie, steruje dźwiękiem, temperaturą i zapachem.</p>
+                    </div>
+                    <div class="bg-white rounded-[20px] p-8 text-left border border-gray-100 shadow-sm">
+                        <div class="text-[0.65rem] font-bold uppercase text-gray-500 mb-2">2 · Kreacja</div>
+                        <h4 class="text-xl font-bold mb-4">XperiBase Studio</h4>
+                        <p class="text-sm text-gray-600">Edytor no-code w przeglądarce. Projektujesz scenariusze reakcji bez programowania – w formie wizualnych bloków.</p>
+                    </div>
+                    <div class="bg-white rounded-[20px] p-8 text-left border border-gray-100 shadow-sm">
+                        <div class="text-[0.65rem] font-bold uppercase text-gray-500 mb-2">3 · Gość</div>
+                        <h4 class="text-xl font-bold mb-4">XperiBase Flow</h4>
+                        <p class="text-sm text-gray-600">Aplikacja mobilna, która rozszerza doświadczenie o treści audio, AR i narrację dopasowaną do użytkownika.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOCK 3: STUDIO -->
+    <section id="studio" class="pt-4 pb-24 studio-section border-t border-gray-200">
+        <div class="title-bar">
+            <h2 class="mb-4">Prototyp <span class="italic text-gray-500 font-serif">XperiBase Studio</span></h2>
+            <h3 class="mb-4">Tak to będzie działało - ustaw sensory i sprawdź wynik:</h3>
+            <p>1. Wybierz projekt. 2. Kliknij w sensor (S1–S…). 3. Przeciągnij efekty z biblioteki na Scenariusz Interakcji. 4. Wgraj na urządzenie. 5. Dotknij 👆</p>
+        </div>
+
+        <div class="studio-outer-container">
+            <div class="app-window studio-container">
+                <div class="studio-header">
+                    <div class="logo-studio">STUDIO CREATOR v2.6</div>
+                    <button class="deploy-btn" onclick="deployToMobile()">⚡ Wgraj na urządzenie</button>
+                </div>
+                <div class="studio-body">
+                    <div class="studio-sidebar-left">
+                        <div class="section-title">Wybór Projektu</div>
+                        <div class="scene-item active" id="scene-p1" onclick="switchScene('p1')">
+                            <div class="scene-thumb" style="background-image: url('GRAPH/planety.webp')">P1</div>
+                            <div><div class="font-bold text-xs">Journey to Europa</div><div class="text-[9px] opacity-60">Galaxy</div></div>
+                        </div>
+                        <div class="scene-item" id="scene-p2" onclick="switchScene('p2')">
+                            <div class="scene-thumb" style="background-image: url('GRAPH/p2.webp')">P2</div>
+                            <div><div class="font-bold text-xs">Harmonia Spa</div><div class="text-[9px] opacity-60">Wellness</div></div>
+                        </div>
+                        <div class="scene-item" id="scene-p3" onclick="switchScene('p3')">
+                            <div class="scene-thumb" style="background-image: url('GRAPH/fala.webp')">P3</div>
+                            <div><div class="font-bold text-xs">Granatowe Morze</div><div class="text-[9px] opacity-60">Marine</div></div>
+                        </div>
+                        <div class="scene-item" id="scene-p4" onclick="switchScene('p4')">
+                            <div class="scene-thumb" style="background-image: url('GRAPH/jezioro.webp')">P4</div>
+                            <div><div class="font-bold text-xs">Jezioro marzeń</div><div class="text-[9px] opacity-60">Natura</div></div>
+                        </div>
+                        <div class="scene-item" id="scene-p5" onclick="switchScene('p5')">
+                            <div class="scene-thumb" style="background-image: url('GRAPH/ptaki.webp')">P5</div>
+                            <div><div class="font-bold text-xs">Koliberek</div><div class="text-[9px] opacity-60">Impasto Art</div></div>
+                        </div>
+                    </div>
+                    <div class="studio-main">
+                        <div class="canvas-wrapper" id="canvas-container">
+                            <div id="main-canvas-img"></div>
+                        </div>
+                        <div class="logic-builder" id="logic-panel" style="opacity: 0.5; pointer-events: none;">
+                            <div class="logic-header">
+                                <div id="logic-title" class="font-bold text-sm text-xb-teal">Scenariusz Interakcji</div>
+                                <div class="text-[11px] text-gray-500 font-mono">ID: <span id="sensor-id">--</span></div>
+                            </div>
+                            <div class="logic-row">
+                                <div class="logic-label">JEŚLI</div>
+                                <div class="drop-zone filled" style="background: rgba(79, 195, 184, 0.12); color: var(--primary-color);">👆 Dotyk w strefie sensora</div>
+                            </div>
+                            <div class="logic-row"><div class="logic-label">WTEDY</div><div class="drop-zone slot" id="slot-1" data-slot="0">Przeciągnij tutaj...</div></div>
+                            <div class="logic-row"><div class="logic-label">ORAZ</div><div class="drop-zone slot" id="slot-2" data-slot="1">Przeciągnij tutaj...</div></div>
+                            <div class="logic-row"><div class="logic-label">ORAZ</div><div class="drop-zone slot" id="slot-3" data-slot="2">Przeciągnij tutaj...</div></div>
+                        </div>
+                    </div>
+                    <div class="studio-sidebar-right">
+                        <div class="section-title">Efekty w Bibliotece</div>
+                        <div class="asset-category">Dźwięk (Audio)</div>
+                        <div class="asset" draggable="true" data-type="sound" data-val="Muzyka Relaksacyjna" data-icon="🎵">🎵 Muzyka Relaks</div>
+                        <div class="asset" draggable="true" data-type="sound" data-val="Szept Lektora" data-icon="🗣️">🗣️ Szept Lektora</div>
+                        <div class="asset" draggable="true" data-type="sound" data-val="Odgłosy Burzy" data-icon="⛈️">⛈️ Odgłosy Burzy</div>
+                        <div class="asset" draggable="true" data-type="sound" data-val="Szum Deszczu" data-icon="🌧️">🌧️ Szum Deszczu</div>
+                        <div class="asset-category">Atmosfera (Zapach)</div>
+                        <div class="asset" draggable="true" data-type="scent" data-val="Lawenda" data-icon="👃">👃 Lawenda</div>
+                        <div class="asset" draggable="true" data-type="scent" data-val="Aromat Kawy" data-icon="☕">☕ Aromat Kawy</div>
+                        <div class="asset" draggable="true" data-type="scent" data-val="Zapach Sosny" data-icon="🌲">🌲 Zapach Sosny</div>
+                        <div class="asset-category">Haptyka (Temperatura)</div>
+                        <div class="asset" draggable="true" data-type="temp" data-val="Ciepło 38°C" data-icon="☀️">☀️ Ciepło 38°C</div>
+                        <div class="asset" draggable="true" data-type="temp" data-val="Mroźny Wiatr" data-icon="❄️">❄️ Mroźny Wiatr</div>
+                        <div class="asset" draggable="true" data-type="temp" data-val="Gorący Piasek" data-icon="🔥">🔥 Gorący Piasek</div>
+                        <div class="asset-category">Światło (AR Focus)</div>
+                        <div class="asset" draggable="true" data-type="light" data-val="Złoty Blask" data-icon="💡">💡 Złoty Blask</div>
+                        <div class="asset" draggable="true" data-type="light" data-val="Zorza Polarna" data-icon="🌌">🌌 Zorza Polarna</div>
+                        <div class="asset" draggable="true" data-type="light" data-val="Neonowy Róż" data-icon="✨">✨ Neonowy Róż</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHONE MOCKUP -->
+            <div class="ar-phone-frame">
+                <div class="ar-phone-inner">
+                    <div class="ar-phone-notch"></div>
+                    <div class="mobile-screen active" id="mobile-loading">
+                        <div class="spinner"></div>
+                        <p class="mt-4 text-xs font-mono" style="color: #94a3b8">Wczytywanie...</p>
+                    </div>
+                    <div class="mobile-screen" id="mobile-content">
+                        <div class="mobile-header" id="mobile-header-img"><div class="mobile-header-overlay">
+                            <h3 id="mobile-title" class="font-bold text-lg">Tytuł</h3>
+                            <p id="mobile-subtitle" class="text-xs opacity-70">Lokalizacja</p>
+                        </div></div>
+                        <div class="interaction-area">
+                            <div class="touch-btn" onclick="mobileInteract()">👆</div>
+                            <p class="text-[10px] text-gray-400 mb-4 uppercase tracking-widest">Symulacja dotyku</p>
+                            <div id="feedback-container" class="w-full px-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOCK 4: FLOW AR -->
+    <section id="flow" class="py-24 bg-white border-t border-gray-200">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center text-left">
+                <div>
+                    <h2 class="text-3xl md:text-5xl font-serif font-bold mb-6 text-xb-dark">XperiBase Flow:<br>Rozszerzona Rzeczywistość</h2>
+                    <div class="space-y-5 text-lg text-gray-700 leading-relaxed">
+                        <p>Zamiast standardowych tabliczek informacyjnych, gość otrzyma aplikację mobilną <strong>Flow</strong>. Będzie ona cyfrowym oknem na niewidoczny proces dziejący się wewnątrz reliefu.</p>
+                        <p>Wykorzystując technologię <strong>AR (Augmented Reality)</strong>, nakładamy wizualne warstwy wideo na fizyczny obraz. Wystarczy nakierować aparat na dzieło, aby zobaczyć ukryte detale i zjawiska zsynchronizowane z dotykiem.</p>
+                        <ul class="list-none space-y-3 mt-6 text-base">
+                            <li class="flex items-start"><span class="mr-3 mt-2 w-2 h-2 bg-xb-dark rounded-full flex-shrink-0"></span><strong>Nakładki VR/AR:</strong> Interaktywne wideo osadzone bezpośrednio na obiekcie.</li>
+                            <li class="flex items-start"><span class="mr-3 mt-2 w-2 h-2 bg-xb-dark rounded-full flex-shrink-0"></span><strong>Cyfrowy Bliźniak:</strong> Przygotowanie sensoryczne dla osób neuroatypowych.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                    <div class="ar-phone-frame">
+                        <div class="ar-phone-inner">
+                            <div class="ar-phone-notch"></div>
+                            <div class="ar-media" id="flowArMedia">
+                                <div class="ar-marker top-left"></div>
+                                <div class="ar-marker top-right"></div>
+                                <div class="ar-marker bottom-left"></div>
+                                <div class="ar-marker bottom-right"></div>
+                                <div class="ar-scanline" id="flowScanline"></div>
+                                <div class="ar-hotspot" style="top:30%; left:25%"></div>
+                                <div class="ar-hotspot" style="top:70%; left:50%"></div>
+                                <div class="ar-hotspot" style="top:30%; left:75%"></div>
+                                <div id="arLabel" class="ar-label">Skieruj aparat na obiekt</div>
+                                <img src="GRAPH/stone.png" alt="Obiekt" onerror="this.src='https://placehold.co/400x800/000/000?text=';">
+                                <video id="arVideo" src="GRAPH/planety.mp4" loop muted playsinline></video>
+                            </div>
+                            <div class="bg-black py-8 text-center">
+                                <button id="btnArPlay" class="ar-play-btn"><i class="fa-solid fa-play"></i></button>
+                                <p id="btnArText" class="text-[15px] text-white font-bold uppercase tracking-[0.2em] mt-4 shadow-sm">Uruchom wizualizację AR</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STOPKA CTA -->
+    <section class="bg-xb-dark text-[#FDFBF7] py-28 border-t border-gray-800">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-5xl font-serif font-bold mb-8 leading-tight">Stwórzmy przestrzeń dla zmysłów<br>otwartą dla wszystkich.</h2>
+            <p class="text-gray-400 max-w-3xl mx-auto mb-14 text-lg md:text-xl font-light">Szukamy współpracy i finansowania, aby kontynuować rozwój ekosystemu sensorycznego i realizować kolejne pilotaże publiczne. Dołącz do nas jako partner.</p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+                <a href="project.html" class="border border-white/30 px-10 py-4 text-xs font-bold tracking-widest uppercase transition hover:border-white">Projekt</a>
+                <a href="partnership.html" class="border border-white/30 px-10 py-4 text-xs font-bold tracking-widest uppercase transition hover:border-white">Partnerstwo</a>
+                <a href="contact.html" class="bg-white text-xb-dark px-10 py-4 text-xs font-bold tracking-widest uppercase hover:bg-gray-200 transition">Kontakt</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-xb-dark text-gray-600 py-10 border-t border-white/5">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] uppercase tracking-widest">
+            <div>&copy; 2026 XperiBase.com. Dział B+R.</div>
+            <div class="flex gap-8"><a href="privacy.html" class="hover:text-white transition-colors">Prywatność</a><a href="accessibility.html" class="hover:text-white transition-colors">Dostępność</a></div>
+        </div>
+    </footer>
+  </main>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const nav = document.getElementById('main-nav');
+    const header = document.getElementById('header');
+
+    // SCROLL LOGIC FOR NAV
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    menuBtn.onclick = () => { 
+        menuBtn.classList.toggle('active'); 
+        nav.classList.toggle('open'); 
+        document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+    };
+
+    function closeMenu() { 
+        menuBtn.classList.remove('active'); 
+        nav.classList.remove('open'); 
+        document.body.style.overflow = '';
+    }
+
+    // Logika Flow AR
+    const arVideo = document.getElementById('arVideo');
+    const btnArPlay = document.getElementById('btnArPlay');
+    const btnArText = document.getElementById('btnArText');
+    const arLabel = document.getElementById('arLabel');
+    const scanline = document.getElementById('flowScanline');
+    const markers = document.querySelectorAll('.ar-marker');
+    const hotspots = document.querySelectorAll('.ar-hotspot');
+
+    function resetFlowState() {
+        if (arVideo) { arVideo.pause(); arVideo.classList.remove('visible'); }
+        if (btnArPlay) btnArPlay.innerHTML = '<i class="fa-solid fa-play"></i>';
+        if (btnArText) btnArText.innerText = 'Uruchom wizualizację AR';
+        if (arLabel) arLabel.innerText = 'Skieruj aparat na obiekt';
+        if (scanline) scanline.classList.remove('visible');
+        markers.forEach(m => { m.classList.remove('active'); m.classList.remove('visible'); });
+        hotspots.forEach(h => h.classList.remove('visible'));
+    }
+
+    if (arVideo && btnArPlay) {
+      btnArPlay.onclick = () => {
+        if(arVideo.paused || !arVideo.classList.contains('visible')) { 
+            btnArPlay.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            arLabel.innerText = 'Inicjalizacja systemu AR...';
+            btnArText.innerText = 'Ładowanie...';
+            setTimeout(() => {
+                arVideo.classList.add('visible'); arVideo.play(); 
+                btnArPlay.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                btnArText.innerText = 'Wizualizacja aktywna';
+                arLabel.innerText = 'Wirtualna warstwa aktywna';
+                scanline.classList.add('visible');
+                markers.forEach(m => { m.classList.add('active'); m.classList.add('visible'); });
+                hotspots.forEach(h => h.classList.add('visible'));
+            }, 1000); 
+        } else { resetFlowState(); }
+      };
+    }
+
+    // Logika Studio
+    document.addEventListener('DOMContentLoaded', () => {
+        const scenes = {
+            p1: { title: "Journey to Europa", subtitle: "Galaxy", defaults: ["Muzyka Relaksacyjna", "Wanilia"], img: "GRAPH/planety.webp", sensors: [{id:1, x:25, y:30}, {id:2, x:75, y:30}, {id:3, x:50, y:70}] },
+            p2: { title: "Harmonia Spa", subtitle: "Wellness Center", defaults: ["Szum Oceanu", "Lawenda", "Ciepło 38°C"], img: "GRAPH/p2.webp", sensors: [{id:1, x:30, y:40}, {id:2, x:70, y:40}, {id:3, x:50, y:80}] },
+            p3: { title: "Granatowe Morze", subtitle: "Marine", defaults: ["Szum Oceanu", "Aromat Kawy"], img: "GRAPH/fala.webp", sensors: [{id:1, x:50, y:30}, {id:2, x:20, y:70}, {id:3, x:80, y:70}] },
+            p4: { title: "Jezioro marzeń", subtitle: "Natura", defaults: ["Szum Deszczu", "Sosna"], img: "GRAPH/jezioro.webp", sensors: [{id:1, x:40, y:20}, {id:2, x:60, y:80}, {id:3, x:15, y:50}] },
+            p5: { title: "Koliberek", subtitle: "Impasto Art", defaults: ["Złoty Blask", "Mroźny Wiatr"], img: "GRAPH/ptaki.webp", sensors: [{id:1, x:50, y:50}, {id:2, x:15, y:15}, {id:3, x:85, y:85}] }
+        };
+
+        let currentScene = 'p1';
+        let selectedSensorId = null;
+        let deployedSensorId = 1;
+        let dragData = null;
+        let studioMemory = {}; 
+
+        window.renderSensors = () => {
+            document.querySelectorAll('#canvas-container .sensor-point').forEach(el => el.remove());
+            document.getElementById('main-canvas-img').style.backgroundImage = `url('${scenes[currentScene].img}')`;
+            document.getElementById('logic-panel').style.opacity = '0.5';
+            document.getElementById('logic-panel').style.pointerEvents = 'none';
+            document.getElementById('logic-title').innerText = "Scenariusz Interakcji";
+            clearSlots();
+            scenes[currentScene].sensors.forEach(s => {
+                const el = document.createElement('div');
+                el.className = 'sensor-point'; el.innerText = 'S' + s.id;
+                el.style.left = s.x + '%'; el.style.top = s.y + '%';
+                el.onclick = () => {
+                    selectedSensorId = s.id;
+                    document.querySelectorAll('.sensor-point').forEach(p => p.classList.remove('selected'));
+                    el.classList.add('selected');
+                    document.getElementById('logic-panel').style.opacity = '1';
+                    document.getElementById('logic-panel').style.pointerEvents = 'all';
+                    document.getElementById('logic-title').innerText = `Scenariusz S${s.id}`;
+                    document.getElementById('sensor-id').innerText = '#' + s.id;
+                    loadSensorMemory(s.id);
+                };
+                document.getElementById('canvas-container').appendChild(el);
+            });
+        };
+
+        const clearSlots = () => document.querySelectorAll('.slot').forEach(slot => { slot.innerText = "Przeciągnij tutaj..."; slot.classList.remove('filled'); });
+
+        const loadSensorMemory = (id) => {
+            clearSlots();
+            const memId = `${currentScene}-${id}`;
+            if (studioMemory[memId]) {
+                studioMemory[memId].forEach((val, index) => {
+                    if (val) {
+                        const slot = document.getElementById(`slot-${index + 1}`);
+                        slot.innerText = val.icon + " " + val.text;
+                        slot.classList.add('filled');
+                    }
+                });
+            }
+        };
+
+        window.switchScene = (key) => {
+            currentScene = key;
+            selectedSensorId = null;
+            document.querySelectorAll('.scene-item').forEach(i => i.classList.remove('active'));
+            document.getElementById('scene-' + key).classList.add('active');
+            renderSensors();
+            resetFlowState();
+            if (arVideo) {
+              const videoSrc = scenes[key].img.replace('.webp', '.mp4');
+              arVideo.src = videoSrc;
+              arVideo.load();
+            }
+        };
+
+        document.querySelectorAll('.asset').forEach(a => {
+            a.ondragstart = () => { dragData = { text: a.getAttribute('data-val'), icon: a.getAttribute('data-icon') }; };
+        });
+
+        document.querySelectorAll('.slot').forEach(slot => {
+            slot.ondragover = (e) => e.preventDefault();
+            slot.ondrop = () => {
+                if(dragData && selectedSensorId) {
+                    slot.innerText = dragData.icon + " " + dragData.text;
+                    slot.classList.add('filled');
+                    const memId = `${currentScene}-${selectedSensorId}`;
+                    if (!studioMemory[memId]) studioMemory[memId] = [null, null, null];
+                    studioMemory[memId][slot.getAttribute('data-slot')] = dragData;
+                }
+            };
+        });
+
+        window.deployToMobile = () => {
+            deployedSensorId = selectedSensorId || 1;
+            const btn = document.querySelector('.deploy-btn');
+            btn.innerText = "⏳ Wgrywanie...";
+            document.querySelector('#studio .mobile-screen#mobile-content').classList.remove('active');
+            document.querySelector('#studio .mobile-screen#mobile-loading').classList.add('active');
+            setTimeout(() => {
+                btn.innerText = "✅ Gotowe";
+                const d = scenes[currentScene];
+                document.getElementById('mobile-title').innerText = d.title;
+                document.getElementById('mobile-subtitle').innerText = d.subtitle;
+                document.getElementById('mobile-header-img').style.backgroundImage = `url('${d.img}')`;
+                document.querySelector('#studio .mobile-screen#mobile-loading').classList.remove('active');
+                document.querySelector('#studio .mobile-screen#mobile-content').classList.add('active');
+                setTimeout(() => btn.innerText = "⚡ Wgraj na urządzenie", 2000);
+            }, 1000);
+        };
+
+        window.mobileInteract = () => {
+            const fb = document.getElementById('feedback-container'); fb.innerHTML = '';
+            const memId = `${currentScene}-${deployedSensorId}`;
+            let itemsToShow = (studioMemory[memId] && studioMemory[memId].some(i => i !== null)) 
+                ? studioMemory[memId].filter(i => i !== null).map(i => `${i.icon} ${i.text}`)
+                : scenes[currentScene].defaults;
+            itemsToShow.forEach((text, i) => {
+                setTimeout(() => {
+                    const c = document.createElement('div');
+                    c.className = 'feedback-card active'; c.innerText = text;
+                    fb.appendChild(c);
+                }, i * 250);
+            });
+        };
+        renderSensors();
+    });
+  </script>
+</body>
+</html>

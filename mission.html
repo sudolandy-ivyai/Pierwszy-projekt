@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasza misja | XperiBase.pl</title>
+    <meta name="description" content="Sztuka multisensoryczna kształtowana wokół ludzkiego doświadczenia. Obrazy i instalacje zaprojektowane tak, by można je było dotykać, odczuwać i rozumieć — a dostępność jest fundamentem, nie dodatkiem.">
+   
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"> 
+    <!-- Google Fonts: Playfair Display & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'xb-cream': '#FDFBF7',
+                        'xb-dark': '#1A1A1A',
+                        'xb-grey': '#F2F0EB',
+                        'xb-accent': '#3D3D3D',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FDFBF7;
+            color: #1A1A1A;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER (FIXED NAVIGATION) --- */
+        .logo-row {
+            position: fixed; /* Zmienione z absolute na fixed */
+            top: 0;
+            right: 0;
+            width: 100%;
+            padding: 15px 40px;
+            z-index: 100; /* Wyższy z-index, aby być zawsze na wierzchu */
+            display: flex;
+            align-items: center; 
+            justify-content: flex-end;
+            gap: 2rem; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Efekt po przewinięciu strony */
+        .logo-row.scrolled {
+            background: rgba(26, 26, 26, 0.85); /* Ciemne tło xb-dark z przezroczystością */
+            backdrop-filter: blur(12px); /* Efekt rozmycia tła pod paskiem */
+            padding: 8px 40px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-logo {
+            height: 120px; 
+            width: auto;
+            display: block;
+            transition: height 0.4s ease;
+        }
+
+        .logo-row.scrolled .main-logo {
+            height: 60px; /* Zmniejszenie logo przy skrolowaniu */
+        }
+
+        .hamburger-menu {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 40px; 
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0;
+            z-index: 110;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: #FFFFFF;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu:hover span { background-color: #e0e0e0; }
+
+        .hamburger-menu.active span { background-color: #000000; }
+        .hamburger-menu.active span:nth-child(1) { transform: translateY(13.5px) rotate(45deg); }
+        .hamburger-menu.active span:nth-child(2) { opacity: 0; }
+        .hamburger-menu.active span:nth-child(3) { transform: translateY(-13.5px) rotate(-45deg); }
+
+        .fullscreen-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #F4F1EA;
+            z-index: 105;
+            display: block;
+            padding: 120px 20px 40px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .fullscreen-nav.open { opacity: 1; visibility: visible; }
+
+        .nav-list {
+            list-style: none;
+            text-align: center;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .nav-list li {
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+        }
+
+        .fullscreen-nav.open .nav-list li { opacity: 1; transform: translateY(0); }
+
+        .nav-list a {
+            color: #000000;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .nav-list a:hover {
+            font-style: italic;
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .logo-row { padding: 10px 30px; }
+            .logo-row.scrolled { padding: 8px 30px; }
+            .main-logo { height: 100px; } 
+        }
+
+        @media (max-width: 600px) {
+            .fullscreen-nav { padding: 100px 16px 30px; }
+            .nav-list li { margin: 18px 0; }
+            .logo-row { justify-content: space-between; width: 100%; padding: 10px 20px; }
+            .logo-row.scrolled { padding: 5px 20px; }
+            .main-logo { height: 70px; } 
+            .logo-row.scrolled .main-logo { height: 50px; }
+            .hamburger-menu { width: 30px; height: 22px; }
+            .hamburger-menu span { height: 2px; }
+            .nav-list a { font-size: 2rem; }
+        }
+
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(26, 26, 26, 0.1) 0%, rgba(26, 26, 26, 0.4) 40%, rgba(26, 26, 26, 0.95) 100%);
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px; left: 0; background: #1A1A1A; color: white; padding: 8px; z-index: 1000; transition: top 0.3s;
+        }
+        .skip-link:focus { top: 0; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <a href="#main-content" class="skip-link">Przejdź do głównej treści</a>
+
+    <div class="logo-row" id="header">
+        <a href="index.html" aria-label="Strona główna XperiBase">
+            <img src="GRAPH/xperibase_blanc.png" alt="Logo XperiBase Studio" class="main-logo">
+        </a>
+        
+        <button class="hamburger-menu" aria-label="Przełącz menu nawigacji" aria-expanded="false" aria-controls="main-nav" id="menuBtn">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+
+ <nav id="main-nav" class="fullscreen-nav" aria-label="Nawigacja główna">
+    <ul class="nav-list">
+      <li><a href="index.html" onclick="closeMenu()">Start</a></li>
+      <li><a href="mission.html" onclick="closeMenu()">Misja</a></li>
+      <li><a href="project.html" onclick="closeMenu()">Projekt</a></li>
+      <li><a href="development.html" onclick="closeMenu()">Proces B+R</a></li>
+      <li><a href="team.html" onclick="closeMenu()">Zespół</a></li>
+      <li><a href="gallery.html" onclick="closeMenu()">Galeria</a></li>
+      <li><a href="education.html" onclick="closeMenu()">Edukacja</a></li>
+      <li><a href="partnership.html" onclick="closeMenu()">Partnerstwo</a></li>
+      <li><a href="survey.html" onclick="closeMenu()">Twój głos</a></li>
+    </ul>
+  </nav>
+
+    <main id="main-content">
+
+        <!-- BLOCK 1: HERO -->
+        <section class="relative h-[100vh] flex items-end justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="GRAPH/blok1.webp" alt="Zbliżenie na teksturowaną instalację artystyczną" class="w-full h-full object-cover">
+            </div>
+            
+            <div class="absolute inset-0 hero-overlay z-10"></div>
+
+            <div class="relative z-20 container mx-auto px-8 text-center text-white pb-0">
+                <div class="max-w-6xl mx-auto mb-0">
+                    <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight font-serif mb-4 drop-shadow-lg">
+                        Wielozmysłowe doświadczenia dostępne dla wszystkich.
+                    </h1>
+                    <div class="max-w-6xl mx-auto mb-0">
+                        <p class="text-xs md:text-sm lg:text-base font-light leading-relaxed drop-shadow-md opacity-95 mb-6">
+                            Za pomocą innowacyjnych technologii tworzymy nowy standard dostępności sensorycznej w przestrzeniach, w których ludzie spotykają się z treścią, emocją i narracją. Nasze podejście redefiniuje relację między odbiorcą a obiektem, wprowadzając wielozmysłowe warstwy komunikacji, które pozwalają na intuicyjne i głębokie przeżywanie sztuki niezależnie od sprawności wzroku. Projektujemy interaktywne doświadczenia, które są nie tylko estetycznie atrakcyjne i angażujące, ale przede wszystkim dostępne dla możliwie najszerszego grona odbiorców, ze szczególnym uwzględnieniem osób niewidomych, słabowidzących oraz użytkowników o zróżnicowanych potrzebach percepcyjnych, zapewniając im pełną autonomię w eksploracji.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="inline-block border-x border-t border-white/20 px-10 py-3 rounded-t-3xl text-[10px] md:text-xs tracking-widest uppercase bg-black/60 text-white backdrop-blur-xl mb-0 transition hover:bg-black/80">
+                    Zmieniamy reguły: od zakazu „Nie dotykać” do zaproszenia: „Dotknij, aby zrozumieć”.
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOCK 2: THE NEED -->
+        <section class="py-8 md:py-12 bg-xb-cream">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                    <div class="order-2 md:order-1 text-left">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 leading-tight font-serif">Dlaczego zmieniać sposób, w jaki doświadczamy sztuki?</h2>
+                        <div class="space-y-4 text-base md:text-lg text-gray-800">
+                            <p>W większości przestrzeni, w których obcujemy z treścią – czy to w kulturze, edukacji, czy w biznesie premium – wciąż zakłada się, że wystarczy patrzeć. Wzrok pozostaje głównym, a często jedynym „wejściem” do doświadczenia.</p>
+                            <p>Jednak współczesny odbiorca coraz częściej nie chce już tylko patrzeć na sztukę – chce ją poczuć, przeżyć i zapamiętać. Szuka doświadczeń, które poruszają emocje i angażują całe ciało, a nie wyłącznie wzrok. Zasada „nie dotykać”, choć chroni dzieła, zamyka ten potencjał doświadczenia – tworząc barierę zarówno dla osób niewidomych i słabowidzących, jak i dla wszystkich tych, którzy poznają świat poprzez dotyk, ruch i wielozmysłowe sygnały.</p>
+                            <p>Jednocześnie codzienne życie jest przesycone ekranami. Wielu z nas tęskni za wolniejszymi, fizycznymi spotkaniami — doświadczeniami angażującymi całe ciało, a nie tylko oczy.</p>
+                            <p class="font-semibold border-l-4 border-xb-dark pl-4 text-xb-dark italic">XperiBase to nasza próba przywrócenia sztuce fizyczności i multisensorycznej głębi — z dostępnością jako punktem wyjścia.</p>
+                        </div>
+                    </div>
+                    <div class="order-1 md:order-2">
+                        <img src="GRAPH/blok2.webp" alt="Interakcja z rzeźbą" class="w-full h-auto rounded-sm shadow-xl grayscale-[10%] hover:grayscale-0 transition duration-700">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOCK 3: OUR APPROACH -->
+        <section class="py-8 md:py-12 bg-xb-grey">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row gap-10 mb-10 items-start text-left">
+                     <div class="md:w-2/3">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4 font-serif text-xb-dark">Jak tworzymy dzieła multisensoryczne</h2>
+                        <p class="text-base md:text-lg text-gray-700 max-w-2xl">Zaczynamy od doświadczenia — jak porusza się dłoń, co jest czytelne, co budzi ciekawość — a dopiero potem dobieramy narzędzia, które mogą wesprzeć to spotkanie.</p>
+                     </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-sm shadow-sm hover:shadow-md transition text-left">
+                        <div class="text-4xl mb-4">✋</div><h3 class="text-xl font-bold mb-2">Dotyk</h3>
+                        <p class="text-gray-700 text-sm">Strukturalne malarstwo o wyraźnej fakturze, stworzone do bezpiecznej i pewnej eksploracji.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-sm shadow-sm hover:shadow-md transition text-left">
+                        <div class="text-4xl mb-4">🌡️</div><h3 class="text-xl font-bold mb-2">Temperatura</h3>
+                        <p class="text-gray-700 text-sm">Ciepło i chłód dodają kontrastu i kierunku — to cicha, intuicyjna warstwa komunikacji.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-sm shadow-sm hover:shadow-md transition text-left">
+                        <div class="text-4xl mb-4">🌿</div><h3 class="text-xl font-bold mb-2">Zapach</h3>
+                        <p class="text-gray-700 text-sm">Subtelne bodźce węchowe mogą wspierać wyobraźnię i pamięć, nie przytłaczając przestrzeni.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-sm shadow-sm hover:shadow-md transition text-left">
+                        <div class="text-4xl mb-4">🔊</div><h3 class="text-xl font-bold mb-2">Dźwięk</h3>
+                        <p class="text-gray-700 text-sm">Narracja i pejzaże dźwiękowe uruchamiane dotykiem — dostępne bez ekranów i aplikacji.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOCK 4: FOR WHOM -->
+        <section class="py-6 md:py-8 bg-xb-cream">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="order-1">
+                        <img src="GRAPH/blok4.webp" alt="Warsztaty społeczności" class="w-full h-auto rounded-sm shadow-lg">
+                    </div>
+                    <div class="order-2 text-left">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 font-serif text-xb-dark">Inkluzywność wbudowana w projekt</h2>
+                        <p class="mb-4 text-base md:text-lg text-gray-800 font-medium">Dostępność nie jest funkcją, którą dodajemy na końcu. Kształtuje projekt od pierwszego szkicu. Projektujemy dla:</p>
+                        <ul class="space-y-3 text-base md:text-lg text-gray-800 list-none pl-2">
+                            <li class="flex items-start"><span class="mr-3 mt-1.5 w-2 h-2 bg-xb-dark rounded-full flex-shrink-0"></span>Szerokiej publiczności poszukującej emocji i nowych form kontaktu,</li>
+                            <li class="flex items-start"><span class="mr-3 mt-1.5 w-2 h-2 bg-xb-dark rounded-full flex-shrink-0"></span>Osób odbierającej świat poza dominacją wzroku – przez dotyk, dźwięk, zapach i temperaturę,</li>
+                            <li class="flex items-start"><span class="mr-3 mt-1.5 w-2 h-2 bg-xb-dark rounded-full flex-shrink-0"></span>Użytkowników wrażliwych sensorycznie i neuroatypowych,</li>
+                            <li class="flex items-start"><span class="mr-3 mt-1.5 w-2 h-2 bg-xb-dark rounded-full flex-shrink-0"></span>Osób na różnych etapach życia i z różnymi możliwościami poznawczym,</li>
+                            <li class="flex items-start"><span class="mr-3 mt-1.5 w-2 h-2 bg-xb-dark rounded-full flex-shrink-0"></span>Dzieci i dorosłych uczących się poprzez doświadczenie i interakcję.</li>
+                        </ul>
+                        <p class="mt-8 p-5 bg-xb-grey border-l-4 border-xb-dark font-medium italic">"Dostępność nie jest dodatkiem. Jest fundamentem procesu twórczego."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOCK 5: CO-DESIGN -->
+        <section class="py-8 md:py-12 bg-white border-t border-gray-100">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+                    <div class="order-1 flex justify-center">
+                        <img src="GRAPH/blok5.webp" alt="Współprojektowanie" class="w-full max-w-md h-auto rounded-sm shadow-xl">
+                    </div>
+                    <div class="order-2 text-left">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 font-serif text-xb-dark">Współprojektowanie w praktyce</h2>
+                        <div class="space-y-4 text-base md:text-lg text-gray-800">
+                            <p>Nasza misja nie jest teoretyczna. Pracujemy bezpośrednio z ludźmi — szczególnie z osobami niewidomymi, słabowidzącymi i neuroatypowymi — aby zrozumieć, jak dzieło „działa” w realnych warunkach.</p>
+                            <p>Obserwujemy ruchy dłoni, komfort odbiorców i intuicyjność interakcji. Równowaga sensoryczna powstaje dzięki takim spotkaniom.</p>
+                            <p class="font-semibold border-l-4 border-xb-dark pl-4 text-xb-dark">Dostępność nie jest dodawana na końcu. Jest testowana, doskonalona i wbudowywana od początku.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOCK 6: VISION -->
+        <section class="py-6 md:py-8 bg-xb-cream text-center border-t border-gray-100">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <h2 class="text-lg md:text-xl font-light uppercase tracking-widest text-gray-500 mb-6 font-serif">Nowy standard przestrzeni doświadczeń</h2>
+                <p class="text-base md:text-lg lg:text-xl font-medium leading-normal mb-6 text-xb-dark font-serif">
+                    Przyszłość nie polega na dokładaniu kolejnych ekranów,<br class="hidden md:block">
+                    lecz na tworzeniu przeżyć, które są bardziej uważne, spokojne i angażujące zmysły.
+                </p>
+                <p class="text-sm md:text-base font-light text-gray-800 mb-6 leading-relaxed max-w-3xl mx-auto">
+                    W XperiBase technologia jest cichym wsparciem — pomaga mówić poprzez dotyk, temperaturę, zapach i dźwięk. Nigdy nie staje się celem samym w sobie.
+                </p>
+                <p class="text-xs md:text-sm font-medium text-xb-dark uppercase tracking-tight">
+                    Nasza misja: multisensoryczna dostępność powinna stać się czymś oczywistym – naturalnym elementem projektowania doświadczeń – a nie rzadkim wyjątkiem.
+                </p>
+            </div>
+        </section>
+
+        <!-- BLOCK 7: IMPACT -->
+        <section class="py-8 md:py-12 bg-white border-t border-gray-100">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-left">
+                    <h2 class="text-3xl font-bold mb-10 text-center font-serif text-xb-dark">Co ta misja umożliwia</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="border border-gray-200 p-6 hover:border-xb-dark transition duration-300">
+                            <span class="block text-4xl font-bold text-gray-200 mb-2">01</span>
+                            <h3 class="text-xl font-bold mb-2 text-xb-dark">Dostępność</h3>
+                            <p class="text-gray-600 text-sm">Dzieła, które można poznawać przez dotyk — razem z innymi, a nie w osobnych „specjalnych sesjach”.</p>
+                        </div>
+                        <div class="border border-gray-200 p-6 hover:border-xb-dark transition duration-300">
+                            <span class="block text-4xl font-bold text-gray-200 mb-2">02</span>
+                            <h3 class="text-xl font-bold mb-2 text-xb-dark">Neuroróżnorodność</h3>
+                            <p class="text-gray-600 text-sm">Projektowanie świadome sensorycznie, które szanuje wrażliwość i unika przeciążenia dzięki uważnym progom bodźców.</p>
+                        </div>
+                        <div class="border border-gray-200 p-6 hover:border-xb-dark transition duration-300">
+                            <span class="block text-4xl font-bold text-gray-200 mb-2">03</span>
+                            <h3 class="text-xl font-bold mb-2 text-xb-dark">Wspólna infrastruktura</h3>
+                            <p class="text-gray-600 text-sm">Praktyczna metoda, którą instytucje mogą wdrażać i adaptować — skoncentrowana na doświadczeniu, nie na urządzeniach.</p>
+                        </div>
+                        <div class="border border-gray-200 p-6 hover:border-xb-dark transition duration-300">
+                            <span class="block text-4xl font-bold text-gray-200 mb-2">04</span>
+                            <h3 class="text-xl font-bold mb-2 text-xb-dark">Edukacja i praktyka</h3>
+                            <p class="text-gray-600 text-sm">Warsztaty i dokumentacja łączące praktykę artystyczną z odpowiedzialną inżynierią.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOCK 8: CTA -->
+        <section id="contact" class="py-12 md:py-20 bg-xb-dark text-[#FDFBF7] text-center">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <h2 class="text-3xl md:text-5xl font-bold mb-10 leading-tight font-serif">Stwórzmy przestrzenie doświadczeń otwarte dla wszystkich.</h2>
+                <div class="flex flex-col md:flex-row justify-center gap-4">
+                    <a href="partnership.html" class="border border-white/30 px-8 py-3 text-xs font-bold tracking-widest uppercase transition hover:border-white">Partnerstwo</a>
+                    <a href="project.html" class="border border-white/30 px-8 py-3 text-xs font-bold tracking-widest uppercase transition hover:border-white">Projekt</a>
+                    <a href="mailto:kontakt@xperibase.pl" class="bg-white text-xb-dark px-10 py-3 text-xs font-bold tracking-widest uppercase hover:bg-gray-200 transition">Skontaktuj się z nami</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-xb-dark text-gray-600 py-8 border-t border-white/5">
+            <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-4">
+                <p class="text-[10px] uppercase tracking-widest">&copy; 2026 XperiBase.pl. Wszelkie prawa zastrzeżone.</p>
+                <div class="flex gap-6 text-[10px] uppercase tracking-widest">
+                    <a href="privacy.html" class="hover:text-white transition" data-modal="privacyModal">Prywatność</a>
+                    <a href="accessibility.html" class="hover:text-white transition" data-modal="accessibilityModal">Dostępność</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- MODALS -->
+    <div id="privacyModal" class="fixed inset-0 z-[999] hidden" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="relative mx-auto my-10 max-w-3xl w-[92%] bg-xb-cream text-xb-dark border border-gray-200 shadow-2xl p-8 overflow-y-auto max-h-[85vh]">
+            <h2 class="text-2xl font-serif font-bold mb-4">Polityka prywatności</h2>
+            <div class="text-sm text-gray-700 leading-relaxed text-left space-y-4">
+                <p>XperiBase zobowiązuje się do ochrony Twojej prywatności. Dane zbierane przez formularze lub bezpośredni kontakt mailowy są przetwarzane wyłącznie w celu nawiązania współpracy.</p>
+                <p>Nie udostępniamy Twoich danych osobom trzecim bez wyraźnej zgody. Przysługuje Ci prawo do wglądu, zmiany oraz usunięcia Twoich danych z naszej bazy.</p>
+            </div>
+            <button class="mt-8 border border-xb-dark px-6 py-2 uppercase text-[10px] font-bold tracking-widest hover:bg-xb-dark hover:text-white transition" onclick="closeModal()">Zamknij</button>
+        </div>
+    </div>
+
+    <div id="accessibilityModal" class="fixed inset-0 z-[999] hidden" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="relative mx-auto my-10 max-w-3xl w-[92%] bg-xb-cream text-xb-dark border border-gray-200 shadow-2xl p-8 overflow-y-auto max-h-[85vh]">
+            <h2 class="text-2xl font-serif font-bold mb-4">Deklaracja dostępności</h2>
+            <div class="text-sm text-gray-700 leading-relaxed text-left space-y-4">
+                <p>Nasza strona oraz projektowane przez nas instalacje są tworzone z myślą o pełnej dostępności. Dążymy do zgodności ze standardami WCAG 2.1 na poziomie AA.</p>
+                <p>Jeśli zauważysz błędy w dostępności lub masz sugestie, jak możemy poprawić odbiór naszych treści przez osoby ze szczególnymi potrzebami, prosimy o kontakt pod adresem: kontakt@xperibase.pl.</p>
+            </div>
+            <button class="mt-8 border border-xb-dark px-6 py-2 uppercase text-[10px] font-bold tracking-widest hover:bg-xb-dark hover:text-white transition" onclick="closeModal()">Zamknij</button>
+        </div>
+    </div>
+
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const nav = document.getElementById('main-nav');
+        const header = document.getElementById('header');
+
+        // Scroll Logic for Navigation
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Hamburger Menu Toggle
+        menuBtn.onclick = () => { 
+            menuBtn.classList.toggle('active'); 
+            nav.classList.toggle('open'); 
+            if (nav.classList.contains('open')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        };
+
+        function closeMenu() { 
+            menuBtn.classList.remove('active'); 
+            nav.classList.remove('open'); 
+            document.body.style.overflow = '';
+        }
+
+        // MODAL LOGIC
+        let activeModal = null;
+        function openModalById(id) {
+            activeModal = document.getElementById(id);
+            if (activeModal) {
+                activeModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        function closeModal() {
+            if (activeModal) {
+                activeModal.classList.add('hidden');
+                document.body.style.overflow = '';
+                activeModal = null;
+            }
+        }
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a[data-modal]');
+            if (link) {
+                e.preventDefault();
+                openModalById(link.getAttribute('data-modal'));
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>

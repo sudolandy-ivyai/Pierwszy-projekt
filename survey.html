@@ -1,0 +1,1635 @@
+--- START OF FILE Paste April 19, 2026 - 12:04PM ---
+
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankieta Badawcza | XperiBase</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 1. RESET & BAZA --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html {
+            background-color: #000;
+            font-family: 'Playfair Display', serif;
+            color: #FFF;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- 2. TŁO I WARSTWY --- */
+        .background-image {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url('GRAPH/tlo.webp');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        .contrast-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.9) 100%);
+            z-index: 2;
+        }
+
+        /* --- 3. HEADER --- */
+        .header-content {
+            position: relative;
+            z-index: 50;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 40px;
+        }
+
+        .logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .main-logo {
+            height: 140px;
+            width: auto;
+            display: block;
+            transition: height 0.3s ease;
+        }
+
+        .hamburger-menu {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 40px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 110;
+        }
+
+        .hamburger-menu span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: #FFFFFF;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu.active span:nth-child(1) { transform: translateY(13.5px) rotate(45deg); }
+        .hamburger-menu.active span:nth-child(2) { opacity: 0; }
+        .hamburger-menu.active span:nth-child(3) { transform: translateY(-13.5px) rotate(-45deg); }
+
+        /* --- 4. KONTENER TREŚCI --- */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto 100px;
+            padding: 20px 40px 40px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* --- 5. STYLIZACJA INTRO --- */
+        .intro-view h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 4vw, 2.5rem);
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #FFF;
+            line-height: 1.3;
+        }
+
+        .intro-view .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .intro-view .desc {
+            text-align: center;
+            font-size: 1rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            font-weight: 300;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.85);
+        }
+
+        .gold-callout {
+            color: #d4af37;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feature-items-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .feature-item {
+            font-size: 0.9rem;
+            color: #d4af37;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .share-cta {
+            margin-top: 5px;
+            font-size: 0.95rem;
+            color: #d4af37;
+            font-weight: 400;
+        }
+
+        .intro-footer-info {
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .segment-label {
+            text-align: center;
+            color: #d4af37;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        /* --- 6. FORMULARZ I SEKCJE --- */
+        #survey-form {
+            background: rgba(10, 10, 10, 0.92);
+            padding: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            display: none;
+        }
+
+        .segment-section { display: none; }
+
+        h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #d4af37; margin-top: 3.5rem; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px; margin-bottom: 30px; text-transform: uppercase; text-align: center; letter-spacing: 1px; }
+        
+        .question-label { text-align: left; margin-bottom: 1.2rem; color: #d4af37; font-size: 0.95rem; font-weight: 500; }
+
+        input[type="text"], select, textarea {
+            width: 100%; max-width: 600px; padding: 15px; background: #000;
+            border: 1px solid rgba(255,255,255,0.2); color: #FFF; border-radius: 2px;
+            font-family: 'Inter', sans-serif; font-size: 1rem; transition: all 0.3s;
+            display: block; margin: 0 auto; appearance: none;
+        }
+        
+        select {
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23d4af37%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%0-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 1.2rem top 50%; background-size: 0.65rem auto;
+            padding-right: 2.5rem; text-align-last: center;
+        }
+
+        .choices-stack { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; width: fit-content; margin: 0 auto 2rem; min-width: 320px; }
+        .choice-item { display: flex; align-items: center; gap: 15px; cursor: pointer; font-size: 0.95rem; color: #ccc; transition: color 0.2s; text-align: left; }
+        .choice-item:hover { color: #FFF; }
+        input[type="radio"], input[type="checkbox"] { width: 22px; height: 22px; accent-color: #d4af37; flex-shrink: 0; cursor: pointer; }
+
+        .table-scale { width: 100%; border-collapse: collapse; margin: 1rem 0; color: #ccc; table-layout: fixed; }
+        .table-scale th, .table-scale td { padding: 15px 5px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .row-head { text-align: left !important; width: 45%; color: #FFF; font-weight: 300; padding-left: 10px !important; font-size: 0.85rem; line-height: 1.4; }
+
+        .btn-send {
+            display: block; width: 100%; max-width: 600px; margin: 60px auto 0; padding: 20px;
+            background: #FFF; color: #000; border: none; font-family: 'Playfair Display', serif;
+            font-size: 1.3rem; font-weight: 600; cursor: pointer; transition: all 0.3s; border-radius: 2px;
+        }
+        .btn-send:hover { background: #d4af37; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+
+        /* --- 7. MENU --- */
+        .fullscreen-nav {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #F4F1EA;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        .fullscreen-nav.open { opacity: 1; visibility: visible; }
+        .nav-list { list-style: none; text-align: center; }
+        .nav-list li { margin: 25px 0; }
+        .nav-list a { color: #000; text-decoration: none; font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 6vw, 3rem); }
+        .nav-list a:hover { font-style: italic; text-decoration: underline; }
+
+        #contact-block { display: none; }
+to { opacity: 1; transform: scale(1); }
+        }
+
+        .form-validation-message {
+            display: none;
+            max-width: 600px;
+            margin: 25px auto 0;
+            padding: 14px 18px;
+            border: 1px solid rgba(212, 175, 55, 0.45);
+            background: rgba(212, 175, 55, 0.08);
+            color: #f3d77a;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .header-content { padding: 15px 20px; }
+            .main-logo { height: 80px; }
+            .container { padding: 20px 15px; }
+            #survey-form { padding: 30px 15px; border-radius: 0; border: none; }
+            .choices-stack { min-width: 100%; }
+            .table-scale thead { display: none; }
+            .table-scale tr { display: flex; flex-direction: column; align-items: flex-start; padding: 15px 0; border-bottom: 1px solid #333; }
+            .row-head { width: 100%; text-align: left !important; margin-bottom: 15px; color: #d4af37; font-weight: 500; font-size: 1rem; }
+            .table-scale td { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
+            .table-scale td::before { content: attr(data-label); font-size: 0.8rem; opacity: 0.6; color: #FFF; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-image"></div>
+    <div class="contrast-overlay"></div>
+
+    <header class="header-content">
+        <div class="logo-row">
+            <a href="index.html">
+                <img src="GRAPH/xperibase_blanc.png" alt="XperiBase Logo" class="main-logo">
+            </a>
+            <button class="hamburger-menu" id="menuBtn" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- SEKCJA WPROWADZAJĄCA -->
+        <div class="intro-view" id="intro-view">
+            <h1>Dostępność, zaangażowanie, doświadczenie – Twój głos ma znaczenie</h1>
+            <p class="subtitle"> Projektujemy rozwiązania, które łączą świat fizyczny i cyfrowy oraz wspierają sztukę, kulturę, edukację, zdrowie i przestrzenie społeczne.</p>
+            <p class="desc">
+                Pomóż nam projektować dostępne, angażujące i multisensoryczne doświadczenia tworzone z myślą o ludziach i ich realnych potrzebach.<br>
+                Twoja perspektywa pomoże nam lepiej zrozumieć wyzwania, potrzeby i kierunki rozwoju różnych typów przestrzeni doświadczeń.
+            </p>
+            
+            <div class="feature-box">
+                <div class="feature-items-row">
+                    <span class="feature-item">🕒 5–7 minut</span>
+                    <span class="feature-item">👉 Podziel się swoim doświadczeniem</span>
+                    <span class="feature-item">📌 Ankieta jest anonimowa</span>
+                    <span class="feature-item">📌 Nie wymaga wiedzy technicznej</span>
+                    <span class="feature-item">🔒 Nie sprzedajemy ani nie udostępniamy danych</span>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 3rem;">
+                <label class="segment-label">Wybierz segment działalności, aby zacząć.</label>
+                <select id="segment-select" onchange="runSurvey()">
+                    <option value="" disabled selected>-- Kliknij, aby wybrać --</option>                    <option value="kultura">Kultura, sztuka i instytucje wystawiennicze</option>
+                    <option value="edukacja">Edukacja i przestrzenie uczenia się</option>
+                    <option value="zdrowie">Zdrowie, terapia i dobrostan</option>
+                    <option value="sektor_publiczny">Sektor publiczny i instytucje społeczne</option>
+                    <option value="inne">Inne / interdyscyplinarne przestrzenie</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- FORMULARZ WŁAŚCIWY -->
+        <form action="send.php" method="POST" id="survey-form">
+            <input type="hidden" name="segment_wybrany" id="hidden_segment">
+
+            <!-- ================= SEGMENT 3: KULTURA I SZTUKA ================= -->
+            <div id="section-kultura" class="segment-section">
+                <h1 style="font-size: 1.6rem; text-align: center; text-transform: uppercase;">ANKIETA – SZTUKA I KULTURA W NOWYM WYMIARZE DOŚWIADCZEŃ</h1>
+                <p style="text-align: center; color: #d4af37; font-weight: 500; margin-top: 1rem; margin-bottom: 0.5rem;">Czas wypełnienia: ok. 5–7 minut</p>
+                <p style="text-align: center; font-weight: 300; font-size: 0.95rem; margin-bottom: 3rem; color: rgba(255,255,255,0.85); max-width: 800px; margin-left: auto; margin-right: auto;">
+                    Ankieta ma charakter eksploracyjny i pomoże nam tworzyć rozwiązania wspierające nowoczesne, dostępne i angażujące formy doświadczania sztuki i kultury.
+                </p>
+
+                <h2>I. METRYCZKA – O TOBIE I TWOJEJ INSTYTUCJI</h2>
+                <div class="form-group">
+                    <p class="question-label">Jakie stanowisko zajmujesz?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_stanowisko" value="Dyrektor"> Dyrektor / Dyrektorka instytucji</label>
+                        <label class="choice-item"><input type="radio" name="c_stanowisko" value="Kurator"> Kurator / Kuratorka</label>
+                        <label class="choice-item"><input type="radio" name="c_stanowisko" value="Producent"> Producent / Koordynator wystaw lub projektów</label>
+                        <label class="choice-item"><input type="radio" name="c_stanowisko" value="Edukacja"> Dział edukacji / dostępności</label>
+                        <label class="choice-item"><input type="radio" name="c_stanowisko" value="Promocja"> Dział promocji / komunikacji</label>
+                        <label class="choice-item"><input type="radio" name="c_stanowisko" value="Artysta"> Artysta / Artystka</label>
+                        <input type="text" name="c_stanowisko_inne" placeholder="Inne (jakie?)" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Profil działalności instytucji / organizacji (można zaznaczyć kilka):</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="c_profil[]" value="Muzeum"> Muzeum</label>
+                        <label class="choice-item"><input type="checkbox" name="c_profil[]" value="Galeria"> Galeria sztuki</label>
+                        <label class="choice-item"><input type="checkbox" name="c_profil[]" value="Centrum"> Centrum kultury / sztuki</label>
+                        <label class="choice-item"><input type="checkbox" name="c_profil[]" value="Wystawiennicza"> Instytucja wystawiennicza</label>
+                        <label class="choice-item"><input type="checkbox" name="c_profil[]" value="Teatr"> Teatr / opera / instytucja performatywna</label>
+                        <label class="choice-item"><input type="checkbox" name="c_profil[]" value="Fundacja"> Organizacja artystyczna / fundacja</label>
+                        <label class="choice-item"><input type="checkbox" name="c_profil[]" value="Projekt"> Projekt artystyczny niezależny</label>
+                        <input type="text" name="c_profil_inne" placeholder="Inne" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Skala organizacji:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_skala" value="mikro"> mikro / projektowa</label>
+                        <label class="choice-item"><input type="radio" name="c_skala" value="mala"> mała instytucja</label>
+                        <label class="choice-item"><input type="radio" name="c_skala" value="srednia"> średnia instytucja</label>
+                        <label class="choice-item"><input type="radio" name="c_skala" value="duza"> duża instytucja / sieć instytucji</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Główna lokalizacja działalności:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_lokalizacja" value="lokalna"> lokalna / regionalna</label>
+                        <label class="choice-item"><input type="radio" name="c_lokalizacja" value="krajowa"> ogólnokrajowa</label>
+                        <label class="choice-item"><input type="radio" name="c_lokalizacja" value="intl"> międzynarodowa</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Szacunkowa liczba odbiorców rocznie:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_odbiorcy" value="do 5k"> do 5 tys.</label>
+                        <label class="choice-item"><input type="radio" name="c_odbiorcy" value="5-20k"> 5–20 tys.</label>
+                        <label class="choice-item"><input type="radio" name="c_odbiorcy" value="20-100k"> 20–100 tys.</label>
+                        <label class="choice-item"><input type="radio" name="c_odbiorcy" value="100k+"> powyżej 100 tys.</label>
+                    </div>
+                </div>
+
+                <h2>II. WYZWANIA W OBSZARZE DOŚWIADCZANIA SZTUKI I KULTURY</h2>
+                <div class="form-group">
+                    <p class="question-label">Czy obecnie identyfikujecie wyzwania związane z formą prezentacji sztuki lub programem wystawienniczym?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_wyzwania_ident" value="Zdecydowanie tak"> Zdecydowanie tak</label>
+                        <label class="choice-item"><input type="radio" name="c_wyzwania_ident" value="Raczej tak"> Raczej tak</label>
+                        <label class="choice-item"><input type="radio" name="c_wyzwania_ident" value="Raczej nie"> Raczej nie</label>
+                        <label class="choice-item"><input type="radio" name="c_wyzwania_ident" value="Nie"> Nie</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Które z poniższych wyzwań są istotne? (można zaznaczyć kilka)</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="c_wyzwania_ist[]" value="Pasywnosc"> Pasywna forma odbioru wystaw / dzieł</label>
+                        <label class="choice-item"><input type="checkbox" name="c_wyzwania_ist[]" value="Zaangazowanie"> Trudność w głębszym zaangażowaniu odbiorców</label>
+                        <label class="choice-item"><input type="checkbox" name="c_wyzwania_ist[]" value="Zapamietywalnosc"> Ograniczona zapamiętywalność wystaw lub narracji</label>
+                        <label class="choice-item"><input type="checkbox" name="c_wyzwania_ist[]" value="Formaty"> Brak nowoczesnych, multisensorycznych formatów</label>
+                        <label class="choice-item"><input type="checkbox" name="c_wyzwania_ist[]" value="Publicznosc"> Trudność w docieraniu do nowych publiczności</label>
+                        <label class="choice-item"><input type="checkbox" name="c_wyzwania_ist[]" value="Dostepnosc"> Ograniczona dostępność dla osób z niepełnosprawnościami</label>
+                        <label class="choice-item"><input type="checkbox" name="c_wyzwania_ist[]" value="Technologia"> Trudność w łączeniu tradycji z nowymi technologiami</label>
+                        <input type="text" name="c_wyzwania_inne" placeholder="Inne" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <h2>III. PIERWSZE WRAŻENIE – XPERIBASE</h2>
+                <div class="form-group">
+                    <p class="question-label">Jak oceniasz potencjalne dopasowanie XperiBase do potrzeb Twojej instytucji lub projektu artystycznego?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_wrazenie" value="Bardzo wysokie"> Bardzo wysokie</label>
+                        <label class="choice-item"><input type="radio" name="c_wrazenie" value="Wysokie"> Wysokie</label>
+                        <label class="choice-item"><input type="radio" name="c_wrazenie" value="Trudno powiedziec"> Trudno powiedzieć</label>
+                        <label class="choice-item"><input type="radio" name="c_wrazenie" value="Niskie"> Niskie</label>
+                        <label class="choice-item"><input type="radio" name="c_wrazenie" value="Niedopasowane"> Niedopasowane</label>
+                    </div>
+                </div>
+
+                <h2>IV. PRIORYTETY W TWORZENIU DOŚWIADCZEŃ KULTURALNYCH</h2>
+                <p style="text-align: center; font-size: 0.9rem; color: #d4af37; margin-bottom: 1.5rem; font-style: italic;">
+                    W skali od 1 (nieważne) do 5 (kluczowe) oceń wagę poniższych elementów w projektach wystawienniczych lub artystycznych.
+                </p>
+                <table class="table-scale">
+                    <thead><tr><th class="row-head">Obszar</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                    <tbody>
+                        <tr><td class="row-head">Budowanie emocjonalnego kontaktu z odbiorcą</td><td data-label="1"><input type="radio" name="cp_emocje" value="1"></td><td data-label="2"><input type="radio" name="cp_emocje" value="2"></td><td data-label="3"><input type="radio" name="cp_emocje" value="3"></td><td data-label="4"><input type="radio" name="cp_emocje" value="4"></td><td data-label="5"><input type="radio" name="cp_emocje" value="5"></td></tr>
+                        <tr><td class="row-head">Wielozmysłowe (multisensoryczne) doświadczenie dzieła</td><td data-label="1"><input type="radio" name="cp_multi" value="1"></td><td data-label="2"><input type="radio" name="cp_multi" value="2"></td><td data-label="3"><input type="radio" name="cp_multi" value="3"></td><td data-label="4"><input type="radio" name="cp_multi" value="4"></td><td data-label="5"><input type="radio" name="cp_multi" value="5"></td></tr>
+                        <tr><td class="row-head">Zapamiętywalność i głębia doświadczenia</td><td data-label="1"><input type="radio" name="cp_glebia" value="1"></td><td data-label="2"><input type="radio" name="cp_glebia" value="2"></td><td data-label="3"><input type="radio" name="cp_glebia" value="3"></td><td data-label="4"><input type="radio" name="cp_glebia" value="4"></td><td data-label="5"><input type="radio" name="cp_glebia" value="5"></td></tr>
+                        <tr><td class="row-head">Innowacyjność formy prezentacji</td><td data-label="1"><input type="radio" name="cp_inno" value="1"></td><td data-label="2"><input type="radio" name="cp_inno" value="2"></td><td data-label="3"><input type="radio" name="cp_inno" value="3"></td><td data-label="4"><input type="radio" name="cp_inno" value="4"></td><td data-label="5"><input type="radio" name="cp_inno" value="5"></td></tr>
+                        <tr><td class="row-head">Dostępność i inkluzywność doświadczeń</td><td data-label="1"><input type="radio" name="cp_inkluz" value="1"></td><td data-label="2"><input type="radio" name="cp_inkluz" value="2"></td><td data-label="3"><input type="radio" name="cp_inkluz" value="3"></td><td data-label="4"><input type="radio" name="cp_inkluz" value="4"></td><td data-label="5"><input type="radio" name="cp_inkluz" value="5"></td></tr>
+                        <tr><td class="row-head">Spójność z koncepcją kuratorską / artystyczną</td><td data-label="1"><input type="radio" name="cp_kurator" value="1"></td><td data-label="2"><input type="radio" name="cp_kurator" value="2"></td><td data-label="3"><input type="radio" name="cp_kurator" value="3"></td><td data-label="4"><input type="radio" name="cp_kurator" value="4"></td><td data-label="5"><input type="radio" name="cp_kurator" value="5"></td></tr>
+                        <tr><td class="row-head">Możliwość edukacyjnego pogłębienia odbioru</td><td data-label="1"><input type="radio" name="cp_edu" value="1"></td><td data-label="2"><input type="radio" name="cp_edu" value="2"></td><td data-label="3"><input type="radio" name="cp_edu" value="3"></td><td data-label="4"><input type="radio" name="cp_edu" value="4"></td><td data-label="5"><input type="radio" name="cp_edu" value="5"></td></tr>
+                    </tbody>
+                </table>
+
+                <h2>V. DOPASOWANIE XPERIBASE DO POTRZEB INSTYTUCJI</h2>
+                <p style="text-align: center; font-size: 0.85rem; opacity: 0.7; margin-bottom: 1.5rem;">
+                    W jakim stopniu XperiBase odpowiada na poniższe potrzeby Twojej instytucji lub projektu?<br>
+                    Skala: 1 – wcale | 2 – w niewielkim stopniu | 3 – częściowo | 4 – w dużym stopniu | 5 – w pełni
+                </p>
+                <table class="table-scale">
+                    <thead><tr><th class="row-head">Potrzeba</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                    <tbody>
+                        <tr><td class="row-head">Aktywizacja odbiorcy zamiast pasywnego oglądania</td><td data-label="1"><input type="radio" name="cm_aktyw" value="1"></td><td data-label="2"><input type="radio" name="cm_aktyw" value="2"></td><td data-label="3"><input type="radio" name="cm_aktyw" value="3"></td><td data-label="4"><input type="radio" name="cm_aktyw" value="4"></td><td data-label="5"><input type="radio" name="cm_aktyw" value="5"></td></tr>
+                        <tr><td class="row-head">Tworzenie multisensorycznej narracji wokół dzieł</td><td data-label="1"><input type="radio" name="cm_narr" value="1"></td><td data-label="2"><input type="radio" name="cm_narr" value="2"></td><td data-label="3"><input type="radio" name="cm_narr" value="3"></td><td data-label="4"><input type="radio" name="cm_narr" value="4"></td><td data-label="5"><input type="radio" name="cm_narr" value="5"></td></tr>
+                        <tr><td class="row-head">Zwiększenie zapamiętywalności wystaw</td><td data-label="1"><input type="radio" name="cm_zapam" value="1"></td><td data-label="2"><input type="radio" name="cm_zapam" value="2"></td><td data-label="3"><input type="radio" name="cm_zapam" value="3"></td><td data-label="4"><input type="radio" name="cm_zapam" value="4"></td><td data-label="5"><input type="radio" name="cm_zapam" value="5"></td></tr>
+                        <tr><td class="row-head">Wsparcie dostępności (niewidomi, słabowidzący, neuroatypowi)</td><td data-label="1"><input type="radio" name="cm_dostep" value="1"></td><td data-label="2"><input type="radio" name="cm_dostep" value="2"></td><td data-label="3"><input type="radio" name="cm_dostep" value="3"></td><td data-label="4"><input type="radio" name="cm_dostep" value="4"></td><td data-label="5"><input type="radio" name="cm_dostep" value="5"></td></tr>
+                        <tr><td class="row-head">Nowoczesna, ale nienachalna technologia</td><td data-label="1"><input type="radio" name="cm_tech" value="1"></td><td data-label="2"><input type="radio" name="cm_tech" value="2"></td><td data-label="3"><input type="radio" name="cm_tech" value="3"></td><td data-label="4"><input type="radio" name="cm_tech" value="4"></td><td data-label="5"><input type="radio" name="cm_tech" value="5"></td></tr>
+                        <tr><td class="row-head">Spójność z wartościami instytucji kultury</td><td data-label="1"><input type="radio" name="cm_wart" value="1"></td><td data-label="2"><input type="radio" name="cm_wart" value="2"></td><td data-label="3"><input type="radio" name="cm_wart" value="3"></td><td data-label="4"><input type="radio" name="cm_wart" value="4"></td><td data-label="5"><input type="radio" name="cm_wart" value="5"></td></tr>
+                        <tr><td class="row-head">Możliwość adaptacji do różnych przestrzeni i wystaw</td><td data-label="1"><input type="radio" name="cm_adapt" value="1"></td><td data-label="2"><input type="radio" name="cm_adapt" value="2"></td><td data-label="3"><input type="radio" name="cm_adapt" value="3"></td><td data-label="4"><input type="radio" name="cm_adapt" value="4"></td><td data-label="5"><input type="radio" name="cm_adapt" value="5"></td></tr>
+                    </tbody>
+                </table>
+
+                <h2>VI. MODEL WSPÓŁPRACY</h2>
+                <div class="form-group">
+                    <p class="question-label">Która forma współpracy z XperiBase byłaby dla Was najbardziej naturalna?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_model_coll" value="Stala"> Wdrożenie do stałej ekspozycji</label>
+                        <label class="choice-item"><input type="radio" name="c_model_coll" value="Czasowa"> Projekt czasowy / wystawa czasowa</label>
+                        <label class="choice-item"><input type="radio" name="c_model_coll" value="Pilotaz"> Pilotaż / projekt testowy</label>
+                        <label class="choice-item"><input type="radio" name="c_model_coll" value="ArtKurator"> Współpraca artystyczno‑kuratorska</label>
+                        <input type="text" name="c_model_inne" placeholder="Inny model" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Który element współpracy byłby dla Was najbardziej wartościowy?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_wartosc" value="Nowa forma"> Nowa forma doświadczania sztuki</label>
+                        <label class="choice-item"><input type="radio" name="c_wartosc" value="Dostepnosc"> Wsparcie dostępności i inkluzywności</label>
+                        <label class="choice-item"><input type="radio" name="c_wartosc" value="Narracja"> Technologia jako narzędzie narracji</label>
+                        <label class="choice-item"><input type="radio" name="c_wartosc" value="Angaz"> Wzmocnienie zaangażowania publiczności</label>
+                        <label class="choice-item"><input type="radio" name="c_wartosc" value="Edukacja"> Edukacyjny potencjał rozwiązania</label>
+                    </div>
+                </div>
+
+                
+                <div class="form-group">
+                    <p class="question-label">Biorąc pod uwagę potencjał Multisensorycznego Nośnika Doświadczeń XperiBase oraz możliwe zastosowania w Państwa organizacji, jaki poziom budżetu byliby Państwo skłonni przeznaczyć na takie rozwiązanie?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_budzet" value="do 5000"> do 5 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="c_budzet" value="5000-10000"> 5 000 – 10 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="c_budzet" value="10000-20000"> 10 000 – 20 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="c_budzet" value="powyzej 20000"> powyżej 20 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="c_budzet" value="trudno powiedziec"> trudno powiedzieć na tym etapie</label>
+                    </div>
+                </div>
+<h2>VII. BARIERY WDROŻENIOWE</h2>
+                <div class="form-group">
+                    <p class="question-label">Co mogłoby być największą barierą we wdrożeniu? (wybierz maks. 2)</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="c_bariery[]" value="Budzet" class="barrier-limit"> Budżet</label>
+                        <label class="choice-item"><input type="checkbox" name="c_bariery[]" value="Przestrzen" class="barrier-limit"> Ograniczenia przestrzenne / techniczne</label>
+                        <label class="choice-item"><input type="checkbox" name="c_bariery[]" value="Kompetencje" class="barrier-limit"> Brak kompetencji technologicznych</label>
+                        <label class="choice-item"><input type="checkbox" name="c_bariery[]" value="Ingerencja" class="barrier-limit"> Obawy o ingerencję w dzieło</label>
+                        <label class="choice-item"><input type="checkbox" name="c_bariery[]" value="Procedury" class="barrier-limit"> Procedury instytucjonalne</label>
+                        <label class="choice-item"><input type="checkbox" name="c_bariery[]" value="Brak" class="barrier-limit"> Nie widzimy istotnych barier</label>
+                    </div>
+                </div>
+
+                <h2>VIII. GOTOWOŚĆ DO WSPÓŁPRACY</h2>
+                <div class="form-group">
+                    <p class="question-label">Czy widzisz potencjał zastosowania XperiBase w działalności Twojej instytucji lub praktyce artystycznej?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_potencjal" value="Tak zdecydowanie"> Tak, zdecydowanie</label>
+                        <label class="choice-item"><input type="radio" name="c_potencjal" value="Raczej tak"> Raczej tak</label>
+                        <label class="choice-item"><input type="radio" name="c_potencjal" value="Byc moze"> Być może w przyszłości</label>
+                        <label class="choice-item"><input type="radio" name="c_potencjal" value="Raczej nie"> Raczej nie</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Czy widzisz sens dalszej rozmowy, prezentacji lub testowego wdrożenia?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_rozmowa" value="Tak"> Tak</label>
+                        <label class="choice-item"><input type="radio" name="c_rozmowa" value="Byc moze pozniej"> Być może później</label>
+                        <label class="choice-item"><input type="radio" name="c_rozmowa" value="Nie"> Nie</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="question-label">Czy byliby Państwo skłonni wystawić krótki list polecający dotyczący naszego produktu, wskazujący, że jest to rozwiązanie warte dalszego rozwoju i upowszechniania (na potrzeby wniosku o grant europejski)?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="c_list_polecajacy" value="Tak"> Tak</label>
+                        <label class="choice-item"><input type="radio" name="c_list_polecajacy" value="Nie"> Nie</label>
+                    </div>
+                </div>
+
+                <h2>IX. WARUNEK IDEALNEGO DOPASOWANIA</h2>
+                <div class="form-group">
+                    <p class="question-label">Co musiałoby się wydarzyć, aby XperiBase było rozwiązaniem idealnie dopasowanym do Twojej instytucji lub projektu artystycznego? (jedno zdanie / myśl)</p>
+                    <textarea name="c_warunek" rows="3" placeholder="Twoja odpowiedź..."></textarea>
+                </div>
+            </div>
+
+
+            <!-- ================= SEGMENT 4: EDUKACJA ================= -->
+            <div id="section-edukacja" class="segment-section">
+                <h1 style="font-size: 1.6rem; text-align: center; text-transform: uppercase;">ANKIETA – EDUKACJA W NOWYM WYMIARZE DOŚWIADCZEŃ</h1>
+                <p style="text-align: center; color: #d4af37; font-weight: 500; margin-top: 1rem; margin-bottom: 0.5rem;">Czas wypełnienia: ok. 5–7 minut</p>
+                <p style="text-align: center; font-weight: 300; font-size: 0.95rem; margin-bottom: 3rem; color: rgba(255,255,255,0.85); max-width: 800px; margin-left: auto; margin-right: auto;">
+                    Ankieta ma charakter eksploracyjny i pomoże nam tworzyć rozwiązania wspierające nowoczesne, angażujące i dostępne procesy uczenia się.
+                </p>
+
+                <h2>I. METRYCZKA – O TOBIE I TWOJEJ ORGANIZACJI</h2>
+                <div class="form-group">
+                    <p class="question-label">Jakie stanowisko zajmujesz?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_stanowisko" value="Dyrektor"> Dyrektor / Dyrektorka placówki</label>
+                        <label class="choice-item"><input type="radio" name="e_stanowisko" value="Nauczyciel"> Nauczyciel / Edukator</label>
+                        <label class="choice-item"><input type="radio" name="e_stanowisko" value="Koordynator"> Koordynator programów edukacyjnych</label>
+                        <label class="choice-item"><input type="radio" name="e_stanowisko" value="Specjalista inno"> Specjalista ds. innowacji / rozwoju</label>
+                        <label class="choice-item"><input type="radio" name="e_stanowisko" value="Pedagog"> Pedagog specjalny / terapeuta</label>
+                        <label class="choice-item"><input type="radio" name="e_stanowisko" value="Trener"> Trener / edukator nieformalny</label>
+                        <input type="text" name="e_stanowisko_inne" placeholder="Inne (jakie?)" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Profil działalności edukacyjnej (można zaznaczyć kilka):</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="e_profil[]" value="Szkola"> Szkoła podstawowa / średnia</label>
+                        <label class="choice-item"><input type="checkbox" name="e_profil[]" value="Uczelnia"> Uczelnia wyższa</label>
+                        <label class="choice-item"><input type="checkbox" name="e_profil[]" value="Centrum"> Centrum edukacyjne / naukowe</label>
+                        <label class="choice-item"><input type="checkbox" name="e_profil[]" value="Nieformalna"> Edukacja nieformalna / warsztatowa</label>
+                        <label class="choice-item"><input type="checkbox" name="e_profil[]" value="Kultura"> Instytucja kultury z programem edukacyjnym</label>
+                        <label class="choice-item"><input type="checkbox" name="e_profil[]" value="Specjalna"> Edukacja specjalna / integracyjna</label>
+                        <input type="text" name="e_profil_inne" placeholder="Inne" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Skala organizacji:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_skala" value="mala"> mała placówka / projekt edukacyjny</label>
+                        <label class="choice-item"><input type="radio" name="e_skala" value="srednia"> średnia placówka</label>
+                        <label class="choice-item"><input type="radio" name="e_skala" value="duza"> duża instytucja / sieć placówek</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Główna forma działania:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_forma" value="stacjonarna"> stacjonarna</label>
+                        <label class="choice-item"><input type="radio" name="e_forma" value="hybrydowa"> hybrydowa</label>
+                        <label class="choice-item"><input type="radio" name="e_forma" value="mobilna"> mobilna / wyjazdowa</label>
+                        <label class="choice-item"><input type="radio" name="e_forma" value="online"> online (z elementami offline)</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Szacunkowa liczba uczestników / uczniów rocznie:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_uczestnicy" value="do 200"> do 200</label>
+                        <label class="choice-item"><input type="radio" name="e_uczestnicy" value="200-1000"> 200–1 000</label>
+                        <label class="choice-item"><input type="radio" name="e_uczestnicy" value="1000-5000"> 1 000–5 000</label>
+                        <label class="choice-item"><input type="radio" name="e_uczestnicy" value="powyzej 5000"> powyżej 5 000</label>
+                    </div>
+                </div>
+
+                <h2>II. WYZWANIA W PROCESIE UCZENIA SIĘ</h2>
+                <div class="form-group">
+                    <p class="question-label">Czy obecnie identyfikujecie wyzwania związane z zaangażowaniem uczestników w proces edukacyjny?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_wyzwania_ident" value="Zdecydowanie tak"> Zdecydowanie tak</label>
+                        <label class="choice-item"><input type="radio" name="e_wyzwania_ident" value="Raczej tak"> Raczej tak</label>
+                        <label class="choice-item"><input type="radio" name="e_wyzwania_ident" value="Raczej nie"> Raczej nie</label>
+                        <label class="choice-item"><input type="radio" name="e_wyzwania_ident" value="Nie"> Nie</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Które z poniższych wyzwań są istotne? (można zaznaczyć kilka)</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="e_wyzwania_ist[]" value="Angaz"> Niskie zaangażowanie i koncentracja uczestników</label>
+                        <label class="choice-item"><input type="checkbox" name="e_wyzwania_ist[]" value="Pasywne"> Pasywne formy nauczania</label>
+                        <label class="choice-item"><input type="checkbox" name="e_wyzwania_ist[]" value="Zapamietywanie"> Trudność w trwałym zapamiętywaniu treści</label>
+                        <label class="choice-item"><input type="checkbox" name="e_wyzwania_ist[]" value="Doswiadczenie"> Ograniczone narzędzia do nauki przez doświadczenie</label>
+                        <label class="choice-item"><input type="checkbox" name="e_wyzwania_ist[]" value="Style"> Brak rozwiązań dla różnych stylów uczenia się</label>
+                        <label class="choice-item"><input type="checkbox" name="e_wyzwania_ist[]" value="Neuro"> Trudność w pracy z osobami neuroatypowymi</label>
+                        <label class="choice-item"><input type="checkbox" name="e_wyzwania_ist[]" value="Dostepnosc"> Niewystarczająca dostępność sensoryczna</label>
+                        <input type="text" name="e_wyzwania_inne" placeholder="Inne" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <h2>III. PIERWSZE WRAŻENIE – XPERIBASE</h2>
+                <div class="form-group">
+                    <p class="question-label">Jak oceniasz potencjalne dopasowanie XperiBase do potrzeb Twojej organizacji edukacyjnej?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_wrazenie" value="Bardzo wysokie"> Bardzo wysokie</label>
+                        <label class="choice-item"><input type="radio" name="e_wrazenie" value="Wysokie"> Wysokie</label>
+                        <label class="choice-item"><input type="radio" name="e_wrazenie" value="Trudno powiedziec"> Trudno powiedzieć</label>
+                        <label class="choice-item"><input type="radio" name="e_wrazenie" value="Niskie"> Niskie</label>
+                        <label class="choice-item"><input type="radio" name="e_wrazenie" value="Niedopasowane"> Niedopasowane</label>
+                    </div>
+                </div>
+
+                <h2>IV. PRIORYTETY W PROJEKTOWANIU DOŚWIADCZEŃ EDUKACYJNYCH</h2>
+                <p style="text-align: center; font-size: 0.9rem; color: #d4af37; margin-bottom: 1.5rem; font-style: italic;">
+                    W skali od 1 (nieważne) do 5 (kluczowe) oceń wagę poniższych elementów w procesie uczenia się.
+                </p>
+                <table class="table-scale">
+                    <thead><tr><th class="row-head">Obszar</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                    <tbody>
+                        <tr><td class="row-head">Aktywne zaangażowanie uczestników</td><td data-label="1"><input type="radio" name="ep_angaz" value="1"></td><td data-label="2"><input type="radio" name="ep_angaz" value="2"></td><td data-label="3"><input type="radio" name="ep_angaz" value="3"></td><td data-label="4"><input type="radio" name="ep_angaz" value="4"></td><td data-label="5"><input type="radio" name="ep_angaz" value="5"></td></tr>
+                        <tr><td class="row-head">Uczenie się przez doświadczenie</td><td data-label="1"><input type="radio" name="ep_dosw" value="1"></td><td data-label="2"><input type="radio" name="ep_dosw" value="2"></td><td data-label="3"><input type="radio" name="ep_dosw" value="3"></td><td data-label="4"><input type="radio" name="ep_dosw" value="4"></td><td data-label="5"><input type="radio" name="ep_dosw" value="5"></td></tr>
+                        <tr><td class="row-head">Wielozmysłowe (multisensoryczne) poznawanie treści</td><td data-label="1"><input type="radio" name="ep_multi" value="1"></td><td data-label="2"><input type="radio" name="ep_multi" value="2"></td><td data-label="3"><input type="radio" name="ep_multi" value="3"></td><td data-label="4"><input type="radio" name="ep_multi" value="4"></td><td data-label="5"><input type="radio" name="ep_multi" value="5"></td></tr>
+                        <tr><td class="row-head">Trwałość zapamiętywania</td><td data-label="1"><input type="radio" name="ep_zapam" value="1"></td><td data-label="2"><input type="radio" name="ep_zapam" value="2"></td><td data-label="3"><input type="radio" name="ep_zapam" value="3"></td><td data-label="4"><input type="radio" name="ep_zapam" value="4"></td><td data-label="5"><input type="radio" name="ep_zapam" value="5"></td></tr>
+                        <tr><td class="row-head">Dostosowanie do różnych potrzeb poznawczych</td><td data-label="1"><input type="radio" name="ep_potrzeby" value="1"></td><td data-label="2"><input type="radio" name="ep_potrzeby" value="2"></td><td data-label="3"><input type="radio" name="ep_potrzeby" value="3"></td><td data-label="4"><input type="radio" name="ep_potrzeby" value="4"></td><td data-label="5"><input type="radio" name="ep_potrzeby" value="5"></td></tr>
+                        <tr><td class="row-head">Dostępność i inkluzywność</td><td data-label="1"><input type="radio" name="ep_inkluzja" value="1"></td><td data-label="2"><input type="radio" name="ep_inkluzja" value="2"></td><td data-label="3"><input type="radio" name="ep_inkluzja" value="3"></td><td data-label="4"><input type="radio" name="ep_inkluzja" value="4"></td><td data-label="5"><input type="radio" name="ep_inkluzja" value="5"></td></tr>
+                        <tr><td class="row-head">Spójność z programem nauczania / celami</td><td data-label="1"><input type="radio" name="ep_program" value="1"></td><td data-label="2"><input type="radio" name="ep_program" value="2"></td><td data-label="3"><input type="radio" name="ep_program" value="3"></td><td data-label="4"><input type="radio" name="ep_program" value="4"></td><td data-label="5"><input type="radio" name="ep_program" value="5"></td></tr>
+                    </tbody>
+                </table>
+
+                <h2>V. DOPASOWANIE XPERIBASE DO POTRZEB EDUKACJI</h2>
+                <p style="text-align: center; font-size: 0.85rem; opacity: 0.7; margin-bottom: 1.5rem;">
+                    W jakim stopniu XperiBase odpowiada na poniższe potrzeby Twojej organizacji?<br>
+                    Skala: 1 – wcale | 2 – w niewielkim stopniu | 3 – częściowo | 4 – w dużym stopniu | 5 – w pełni
+                </p>
+                <table class="table-scale">
+                    <thead><tr><th class="row-head">Potrzeba</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                    <tbody>
+                        <tr><td class="row-head">Aktywizacja uczestników zamiast pasywnego odbioru</td><td data-label="1"><input type="radio" name="em_akt" value="1"></td><td data-label="2"><input type="radio" name="em_akt" value="2"></td><td data-label="3"><input type="radio" name="em_akt" value="3"></td><td data-label="4"><input type="radio" name="em_akt" value="4"></td><td data-label="5"><input type="radio" name="em_akt" value="5"></td></tr>
+                        <tr><td class="row-head">Wielozmysłowe przyswajanie wiedzy</td><td data-label="1"><input type="radio" name="em_multi" value="1"></td><td data-label="2"><input type="radio" name="em_multi" value="2"></td><td data-label="3"><input type="radio" name="em_multi" value="3"></td><td data-label="4"><input type="radio" name="em_multi" value="4"></td><td data-label="5"><input type="radio" name="em_multi" value="5"></td></tr>
+                        <tr><td class="row-head">Zwiększenie zapamiętywalności materiału</td><td data-label="1"><input type="radio" name="em_zapam" value="1"></td><td data-label="2"><input type="radio" name="em_zapam" value="2"></td><td data-label="3"><input type="radio" name="em_zapam" value="3"></td><td data-label="4"><input type="radio" name="em_zapam" value="4"></td><td data-label="5"><input type="radio" name="em_zapam" value="5"></td></tr>
+                        <tr><td class="row-head">Wsparcie dla osób z różnymi potrzebami edukacyjnymi</td><td data-label="1"><input type="radio" name="em_potrz" value="1"></td><td data-label="2"><input type="radio" name="em_potrz" value="2"></td><td data-label="3"><input type="radio" name="em_potrz" value="3"></td><td data-label="4"><input type="radio" name="em_potrz" value="4"></td><td data-label="5"><input type="radio" name="em_potrz" value="5"></td></tr>
+                        <tr><td class="row-head">Nowoczesna, nienachalna technologia w edukacji</td><td data-label="1"><input type="radio" name="em_tech" value="1"></td><td data-label="2"><input type="radio" name="em_tech" value="2"></td><td data-label="3"><input type="radio" name="em_tech" value="3"></td><td data-label="4"><input type="radio" name="em_tech" value="4"></td><td data-label="5"><input type="radio" name="em_tech" value="5"></td></tr>
+                        <tr><td class="row-head">Możliwość adaptacji do różnych grup wiekowych</td><td data-label="1"><input type="radio" name="em_wiek" value="1"></td><td data-label="2"><input type="radio" name="em_wiek" value="2"></td><td data-label="3"><input type="radio" name="em_wiek" value="3"></td><td data-label="4"><input type="radio" name="em_wiek" value="4"></td><td data-label="5"><input type="radio" name="em_wiek" value="5"></td></tr>
+                        <tr><td class="row-head">Integracja z istniejącymi programami edukacyjnymi</td><td data-label="1"><input type="radio" name="em_prog" value="1"></td><td data-label="2"><input type="radio" name="em_prog" value="2"></td><td data-label="3"><input type="radio" name="em_prog" value="3"></td><td data-label="4"><input type="radio" name="em_prog" value="4"></td><td data-label="5"><input type="radio" name="em_prog" value="5"></td></tr>
+                    </tbody>
+                </table>
+
+                <h2>VI. MODEL WSPÓŁPRACY</h2>
+                <div class="form-group">
+                    <p class="question-label">Która forma współpracy z XperiBase byłaby dla Was najbardziej naturalna?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_model_coll" value="Stale"> Stałe wdrożenie w przestrzeni edukacyjnej</label>
+                        <label class="choice-item"><input type="radio" name="e_model_coll" value="Pilotaz"> Program pilotażowy / testowy</label>
+                        <label class="choice-item"><input type="radio" name="e_model_coll" value="Modul"> Moduł edukacyjny do wybranych zajęć</label>
+                        <label class="choice-item"><input type="radio" name="e_model_coll" value="Wspoltworzenie"> Współtworzenie programu edukacyjnego</label>
+                        <input type="text" name="e_model_inne" placeholder="Inny model" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Który element współpracy miałby dla Was największą wartość?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_wartosc" value="Nauka"> Nowe formy nauki przez doświadczenie</label>
+                        <label class="choice-item"><input type="radio" name="e_wartosc" value="Dostepnosc"> Wsparcie dostępności i inkluzywności</label>
+                        <label class="choice-item"><input type="radio" name="e_wartosc" value="Technologia"> Technologia jako narzędzie edukacyjne</label>
+                        <label class="choice-item"><input type="radio" name="e_wartosc" value="Angaz"> Zwiększenie zaangażowania uczestników</label>
+                        <label class="choice-item"><input type="radio" name="e_wartosc" value="Efekty"> Efekty edukacyjne (zrozumienie, zapamiętywanie)</label>
+                    </div>
+                </div>
+
+                
+                <div class="form-group">
+                    <p class="question-label">Biorąc pod uwagę potencjał Multisensorycznego Nośnika Doświadczeń XperiBase oraz możliwe zastosowania w Państwa organizacji, jaki poziom budżetu byliby Państwo skłonni przeznaczyć na takie rozwiązanie?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_budzet" value="do 5000"> do 5 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="e_budzet" value="5000-10000"> 5 000 – 10 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="e_budzet" value="10000-20000"> 10 000 – 20 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="e_budzet" value="powyzej 20000"> powyżej 20 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="e_budzet" value="trudno powiedziec"> trudno powiedzieć na tym etapie</label>
+                    </div>
+                </div>
+<h2>VII. BARIERY WDROŻENIOWE</h2>
+                <div class="form-group">
+                    <p class="question-label">Co mogłoby być największą barierą we wdrożeniu? (wybierz maks. 2)</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="e_bariery[]" value="Budzet" class="barrier-limit"> Budżet</label>
+                        <label class="choice-item"><input type="checkbox" name="e_bariery[]" value="Infrastruktura" class="barrier-limit"> Brak infrastruktury technicznej</label>
+                        <label class="choice-item"><input type="checkbox" name="e_bariery[]" value="Ograniczenia" class="barrier-limit"> Ograniczenia programowe / formalne</label>
+                        <label class="choice-item"><input type="checkbox" name="e_bariery[]" value="Kompetencje" class="barrier-limit"> Brak kompetencji technologicznych zespołu</label>
+                        <label class="choice-item"><input type="checkbox" name="e_bariery[]" value="Czas" class="barrier-limit"> Czas wdrożenia</label>
+                        <label class="choice-item"><input type="checkbox" name="e_bariery[]" value="Brak" class="barrier-limit"> Nie widzimy istotnych barier</label>
+                    </div>
+                </div>
+
+                <h2>VIII. GOTOWOŚĆ DO WSPÓŁPRACY</h2>
+                <div class="form-group">
+                    <p class="question-label">Czy widzisz potencjał zastosowania XperiBase w działalności edukacyjnej Twojej organizacji?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_potencjal" value="Tak"> Tak, zdecydowanie</label>
+                        <label class="choice-item"><input type="radio" name="e_potencjal" value="Raczej"> Raczej tak</label>
+                        <label class="choice-item"><input type="radio" name="e_potencjal" value="Przyszlosc"> Być może w przyszłości</label>
+                        <label class="choice-item"><input type="radio" name="e_potencjal" value="Nie"> Raczej nie</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Czy widzisz sens dalszej rozmowy, prezentacji lub testowego wdrożenia?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_rozmowa" value="Tak"> Tak</label>
+                        <label class="choice-item"><input type="radio" name="e_rozmowa" value="Pozniej"> Być może później</label>
+                        <label class="choice-item"><input type="radio" name="e_rozmowa" value="Nie"> Nie</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="question-label">Czy byliby Państwo skłonni wystawić krótki list polecający dotyczący naszego produktu, wskazujący, że jest to rozwiązanie warte dalszego rozwoju i upowszechniania (na potrzeby wniosku o grant europejski)?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="e_list_polecajacy" value="Tak"> Tak</label>
+                        <label class="choice-item"><input type="radio" name="e_list_polecajacy" value="Nie"> Nie</label>
+                    </div>
+                </div>
+
+                <h2>IX. WARUNEK IDEALNEGO DOPASOWANIA</h2>
+                <div class="form-group">
+                    <p class="question-label">Co musiałoby się wydarzyć, aby XperiBase było rozwiązaniem idealnie dopasowanym do Twojej organizacji edukacyjnej? (jedno zdanie / myśl)</p>
+                    <textarea name="e_warunek" rows="3" placeholder="Twoja odpowiedź..."></textarea>
+                </div>
+            </div>
+
+
+            <!-- ================= SEGMENT 5: ZDROWIE, TERAPIA I DOBROSTAN ================= -->
+            <div id="section-zdrowie" class="segment-section">
+                <h1 style="font-size: 1.6rem; text-align: center; text-transform: uppercase;">ANKIETA – ZDROWIE, TERAPIA I DOBROSTAN W NOWYM WYMIARZE DOŚWIADCZEŃ</h1>
+                <p style="text-align: center; color: #d4af37; font-weight: 500; margin-top: 1rem; margin-bottom: 0.5rem;">Czas wypełnienia: ok. 5–7 minut</p>
+                <p style="text-align: center; font-weight: 300; font-size: 0.95rem; margin-bottom: 3rem; color: rgba(255,255,255,0.85); max-width: 800px; margin-left: auto; margin-right: auto;">
+                    Ankieta ma charakter eksploracyjny i pomoże nam tworzyć rozwiązania wspierające zdrowie psychiczne, terapię oraz dobrostan poprzez bezpieczne, multisensoryczne doświadczenia.
+                </p>
+
+                <h2>I. METRYCZKA – O TOBIE I TWOJEJ ORGANIZACJI</h2>
+                <div class="form-group">
+                    <p class="question-label">Jakie stanowisko zajmujesz?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_stanowisko" value="Dyrektor"> Dyrektor / Dyrektorka placówki</label>
+                        <label class="choice-item"><input type="radio" name="z_stanowisko" value="Lekarz Terapeuta"> Lekarz / Terapeuta / Psycholog</label>
+                        <label class="choice-item"><input type="radio" name="z_stanowisko" value="Fizjoterapeuta"> Fizjoterapeuta / Terapeuta zajęciowy</label>
+                        <label class="choice-item"><input type="radio" name="z_stanowisko" value="Koordynator"> Koordynator programów terapeutycznych</label>
+                        <label class="choice-item"><input type="radio" name="z_stanowisko" value="Specjalista inno"> Specjalista ds. innowacji / rozwoju</label>
+                        <input type="text" name="z_stanowisko_inne" placeholder="Inne (jakie?)" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Profil działalności (można zaznaczyć kilka):</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="z_profil[]" value="Medyczna"> Placówka medyczna</label>
+                        <label class="choice-item"><input type="checkbox" name="z_profil[]" value="Rehabilitacyjne"> Centrum terapeutyczne / rehabilitacyjne</label>
+                        <label class="choice-item"><input type="checkbox" name="z_profil[]" value="Psychologiczny"> Gabinet psychologiczny / psychoterapeutyczny</label>
+                        <label class="choice-item"><input type="checkbox" name="z_profil[]" value="Wellness"> Centrum wellness / wellbeing</label>
+                        <label class="choice-item"><input type="checkbox" name="z_profil[]" value="Wsparcie"> Ośrodek wsparcia / terapii specjalistycznej</label>
+                        <label class="choice-item"><input type="checkbox" name="z_profil[]" value="Projekt"> Projekt terapeutyczny / badawczy</label>
+                        <input type="text" name="z_profil_inne" placeholder="Inne" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Skala organizacji:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_skala" value="indywidualna"> praktyka indywidualna</label>
+                        <label class="choice-item"><input type="radio" name="z_skala" value="mala"> mała placówka</label>
+                        <label class="choice-item"><input type="radio" name="z_skala" value="srednia"> średnia placówka</label>
+                        <label class="choice-item"><input type="radio" name="z_skala" value="duza"> duża instytucja / sieć placówek</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Główna forma pracy z pacjentami / odbiorcami:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_forma" value="indywidualna"> indywidualna</label>
+                        <label class="choice-item"><input type="radio" name="z_forma" value="grupowa"> grupowa</label>
+                        <label class="choice-item"><input type="radio" name="z_forma" value="stacjonarna"> stacjonarna</label>
+                        <label class="choice-item"><input type="radio" name="z_forma" value="hybrydowa"> hybrydowa</label>
+                        <label class="choice-item"><input type="radio" name="z_forma" value="mobilna"> mobilna</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Szacunkowa liczba pacjentów / uczestników rocznie:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_pacjenci" value="do 200"> do 200</label>
+                        <label class="choice-item"><input type="radio" name="z_pacjenci" value="200-1000"> 200–1 000</label>
+                        <label class="choice-item"><input type="radio" name="z_pacjenci" value="1000-5000"> 1 000–5 000</label>
+                        <label class="choice-item"><input type="radio" name="z_pacjenci" value="powyzej 5000"> powyżej 5 000</label>
+                    </div>
+                </div>
+
+                <h2>II. WYZWANIA W OBSZARZE ZDROWIA, TERAPII I DOBROSTANU</h2>
+                <div class="form-group">
+                    <p class="question-label">Czy obecnie identyfikujecie wyzwania związane z zaangażowaniem pacjentów lub skutecznością oddziaływań terapeutycznych?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_wyzwania_ident" value="Zdecydowanie tak"> Zdecydowanie tak</label>
+                        <label class="choice-item"><input type="radio" name="z_wyzwania_ident" value="Raczej tak"> Raczej tak</label>
+                        <label class="choice-item"><input type="radio" name="z_wyzwania_ident" value="Raczej nie"> Raczej nie</label>
+                        <label class="choice-item"><input type="radio" name="z_wyzwania_ident" value="Nie"> Nie</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Które z poniższych wyzwań są istotne? (można zaznaczyć kilka)</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="z_wyzwania_ist[]" value="Bezpieczenstwo"> Trudność w budowaniu poczucia bezpieczeństwa i zaufania</label>
+                        <label class="choice-item"><input type="checkbox" name="z_wyzwania_ist[]" value="Zaangazowanie"> Ograniczone zaangażowanie pacjentów w proces terapeutyczny</label>
+                        <label class="choice-item"><input type="checkbox" name="z_wyzwania_ist[]" value="Stres"> Wysoki poziom stresu, napięcia lub przebodźcowania</label>
+                        <label class="choice-item"><input type="checkbox" name="z_wyzwania_ist[]" value="Regulacja"> Brak narzędzi wspierających regulację sensoryczną</label>
+                        <label class="choice-item"><input type="checkbox" name="z_wyzwania_ist[]" value="Personalizacja"> Ograniczone możliwości personalizacji terapii</label>
+                        <label class="choice-item"><input type="checkbox" name="z_wyzwania_ist[]" value="Neuroatypowi"> Trudność w pracy z osobami neuroatypowymi</label>
+                        <label class="choice-item"><input type="checkbox" name="z_wyzwania_ist[]" value="Dobrostan"> Niewystarczające narzędzia wspierające dobrostan psychiczny</label>
+                        <input type="text" name="z_wyzwania_inne" placeholder="Inne" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <h2>III. PIERWSZE WRAŻENIE – XPERIBASE</h2>
+                <div class="form-group">
+                    <p class="question-label">Jak oceniasz potencjalne dopasowanie XperiBase do potrzeb Twojej organizacji lub praktyki terapeutycznej?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_wrazenie" value="Bardzo wysokie"> Bardzo wysokie</label>
+                        <label class="choice-item"><input type="radio" name="z_wrazenie" value="Wysokie"> Wysokie</label>
+                        <label class="choice-item"><input type="radio" name="z_wrazenie" value="Trudno powiedziec"> Trudno powiedzieć</label>
+                        <label class="choice-item"><input type="radio" name="z_wrazenie" value="Niskie"> Niskie</label>
+                        <label class="choice-item"><input type="radio" name="z_wrazenie" value="Niedopasowane"> Niedopasowane</label>
+                    </div>
+                </div>
+
+                <h2>IV. PRIORYTETY W PROJEKTOWANIU DOŚWIADCZEŃ TERAPEUTYCZNYCH</h2>
+                <p style="text-align: center; font-size: 0.9rem; color: #d4af37; margin-bottom: 1.5rem; font-style: italic;">
+                    W skali od 1 (nieważne) do 5 (kluczowe) oceń wagę poniższych elementów w pracy terapeutycznej lub wellbeingowej.
+                </p>
+                <table class="table-scale">
+                    <thead><tr><th class="row-head">Obszar</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                    <tbody>
+                        <tr><td class="row-head">Poczucie bezpieczeństwa i komfortu</td><td data-label="1"><input type="radio" name="zp_bezpieczenstwo" value="1"></td><td data-label="2"><input type="radio" name="zp_bezpieczenstwo" value="2"></td><td data-label="3"><input type="radio" name="zp_bezpieczenstwo" value="3"></td><td data-label="4"><input type="radio" name="zp_bezpieczenstwo" value="4"></td><td data-label="5"><input type="radio" name="zp_bezpieczenstwo" value="5"></td></tr>
+                        <tr><td class="row-head">Regulacja emocjonalna i sensoryczna</td><td data-label="1"><input type="radio" name="zp_regulacja" value="1"></td><td data-label="2"><input type="radio" name="zp_regulacja" value="2"></td><td data-label="3"><input type="radio" name="zp_regulacja" value="3"></td><td data-label="4"><input type="radio" name="zp_regulacja" value="4"></td><td data-label="5"><input type="radio" name="zp_regulacja" value="5"></td></tr>
+                        <tr><td class="row-head">Wielozmysłowe (multisensoryczne) wsparcie procesu terapii</td><td data-label="1"><input type="radio" name="zp_multi" value="1"></td><td data-label="2"><input type="radio" name="zp_multi" value="2"></td><td data-label="3"><input type="radio" name="zp_multi" value="3"></td><td data-label="4"><input type="radio" name="zp_multi" value="4"></td><td data-label="5"><input type="radio" name="zp_multi" value="5"></td></tr>
+                        <tr><td class="row-head">Redukcja stresu i napięcia</td><td data-label="1"><input type="radio" name="zp_redukcja" value="1"></td><td data-label="2"><input type="radio" name="zp_redukcja" value="2"></td><td data-label="3"><input type="radio" name="zp_redukcja" value="3"></td><td data-label="4"><input type="radio" name="zp_redukcja" value="4"></td><td data-label="5"><input type="radio" name="zp_redukcja" value="5"></td></tr>
+                        <tr><td class="row-head">Personalizacja doświadczenia pacjenta</td><td data-label="1"><input type="radio" name="zp_perso" value="1"></td><td data-label="2"><input type="radio" name="zp_perso" value="2"></td><td data-label="3"><input type="radio" name="zp_perso" value="3"></td><td data-label="4"><input type="radio" name="zp_perso" value="4"></td><td data-label="5"><input type="radio" name="zp_perso" value="5"></td></tr>
+                        <tr><td class="row-head">Dostępność i inkluzywność</td><td data-label="1"><input type="radio" name="zp_dostep" value="1"></td><td data-label="2"><input type="radio" name="zp_dostep" value="2"></td><td data-label="3"><input type="radio" name="zp_dostep" value="3"></td><td data-label="4"><input type="radio" name="zp_dostep" value="4"></td><td data-label="5"><input type="radio" name="zp_dostep" value="5"></td></tr>
+                        <tr><td class="row-head">Łatwość adaptacji do różnych form terapii</td><td data-label="1"><input type="radio" name="zp_adaptacja" value="1"></td><td data-label="2"><input type="radio" name="zp_adaptacja" value="2"></td><td data-label="3"><input type="radio" name="zp_adaptacja" value="3"></td><td data-label="4"><input type="radio" name="zp_adaptacja" value="4"></td><td data-label="5"><input type="radio" name="zp_adaptacja" value="5"></td></tr>
+                    </tbody>
+                </table>
+
+                <h2>V. DOPASOWANIE XPERIBASE DO POTRZEB ZDROWIA I TERAPII</h2>
+                <p style="text-align: center; font-size: 0.85rem; opacity: 0.7; margin-bottom: 1.5rem;">
+                    W jakim stopniu XperiBase odpowiada na poniższe potrzeby Twojej organizacji?<br>
+                    Skala: 1 – wcale | 2 – w niewielkim stopniu | 3 – częściowo | 4 – w dużym stopniu | 5 – w pełni
+                </p>
+                <table class="table-scale">
+                    <thead><tr><th class="row-head">Potrzeba</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                    <tbody>
+                        <tr><td class="row-head">Wsparcie regulacji sensorycznej i emocjonalnej</td><td data-label="1"><input type="radio" name="zm_regulacja" value="1"></td><td data-label="2"><input type="radio" name="zm_regulacja" value="2"></td><td data-label="3"><input type="radio" name="zm_regulacja" value="3"></td><td data-label="4"><input type="radio" name="zm_regulacja" value="4"></td><td data-label="5"><input type="radio" name="zm_regulacja" value="5"></td></tr>
+                        <tr><td class="row-head">Budowanie bezpiecznego środowiska terapeutycznego</td><td data-label="1"><input type="radio" name="zm_bezpieczenstwo" value="1"></td><td data-label="2"><input type="radio" name="zm_bezpieczenstwo" value="2"></td><td data-label="3"><input type="radio" name="zm_bezpieczenstwo" value="3"></td><td data-label="4"><input type="radio" name="zm_bezpieczenstwo" value="4"></td><td data-label="5"><input type="radio" name="zm_bezpieczenstwo" value="5"></td></tr>
+                        <tr><td class="row-head">Zwiększenie zaangażowania pacjentów w proces terapii</td><td data-label="1"><input type="radio" name="zm_angaz" value="1"></td><td data-label="2"><input type="radio" name="zm_angaz" value="2"></td><td data-label="3"><input type="radio" name="zm_angaz" value="3"></td><td data-label="4"><input type="radio" name="zm_angaz" value="4"></td><td data-label="5"><input type="radio" name="zm_angaz" value="5"></td></tr>
+                        <tr><td class="row-head">Możliwość indywidualnego dostosowania doświadczeń</td><td data-label="1"><input type="radio" name="zm_perso" value="1"></td><td data-label="2"><input type="radio" name="zm_perso" value="2"></td><td data-label="3"><input type="radio" name="zm_perso" value="3"></td><td data-label="4"><input type="radio" name="zm_perso" value="4"></td><td data-label="5"><input type="radio" name="zm_perso" value="5"></td></tr>
+                        <tr><td class="row-head">Nienachalna, bezpieczna technologia</td><td data-label="1"><input type="radio" name="zm_tech" value="1"></td><td data-label="2"><input type="radio" name="zm_tech" value="2"></td><td data-label="3"><input type="radio" name="zm_tech" value="3"></td><td data-label="4"><input type="radio" name="zm_tech" value="4"></td><td data-label="5"><input type="radio" name="zm_tech" value="5"></td></tr>
+                        <tr><td class="row-head">Wsparcie pracy z osobami neuroatypowymi</td><td data-label="1"><input type="radio" name="zm_neuro" value="1"></td><td data-label="2"><input type="radio" name="zm_neuro" value="2"></td><td data-label="3"><input type="radio" name="zm_neuro" value="3"></td><td data-label="4"><input type="radio" name="zm_neuro" value="4"></td><td data-label="5"><input type="radio" name="zm_neuro" value="5"></td></tr>
+                        <tr><td class="row-head">Integracja z istniejącymi metodami terapeutycznymi</td><td data-label="1"><input type="radio" name="zm_integra" value="1"></td><td data-label="2"><input type="radio" name="zm_integra" value="2"></td><td data-label="3"><input type="radio" name="zm_integra" value="3"></td><td data-label="4"><input type="radio" name="zm_integra" value="4"></td><td data-label="5"><input type="radio" name="zm_integra" value="5"></td></tr>
+                    </tbody>
+                </table>
+
+                <h2>VI. MODEL WSPÓŁPRACY</h2>
+                <div class="form-group">
+                    <p class="question-label">Która forma współpracy z XperiBase byłaby dla Was najbardziej naturalna?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_model_coll" value="Stale"> Stałe wdrożenie w przestrzeni terapeutycznej</label>
+                        <label class="choice-item"><input type="radio" name="z_model_coll" value="Pilotaz"> Program pilotażowy / testowy</label>
+                        <label class="choice-item"><input type="radio" name="z_model_coll" value="Modul"> Moduł wspierający wybrane formy terapii</label>
+                        <label class="choice-item"><input type="radio" name="z_model_coll" value="Badania"> Współpraca badawczo‑rozwojowa</label>
+                        <input type="text" name="z_model_inne" placeholder="Inny model" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Który element współpracy miałby dla Was największą wartość?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_wartosc" value="Proces"> Wsparcie procesu terapeutycznego</label>
+                        <label class="choice-item"><input type="radio" name="z_wartosc" value="Regulacja"> Narzędzie regulacji sensorycznej i emocjonalnej</label>
+                        <label class="choice-item"><input type="radio" name="z_wartosc" value="Dobrostan"> Bezpieczna technologia wspierająca dobrostan</label>
+                        <label class="choice-item"><input type="radio" name="z_wartosc" value="Personalizacja"> Możliwość personalizacji pracy z pacjentem</label>
+                        <label class="choice-item"><input type="radio" name="z_wartosc" value="Wplyw"> Mierzalny wpływ na samopoczucie i zaangażowanie</label>
+                    </div>
+                </div>
+
+                
+                <div class="form-group">
+                    <p class="question-label">Biorąc pod uwagę potencjał Multisensorycznego Nośnika Doświadczeń XperiBase oraz możliwe zastosowania w Państwa organizacji, jaki poziom budżetu byliby Państwo skłonni przeznaczyć na takie rozwiązanie?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_budzet" value="do 5000"> do 5 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="z_budzet" value="5000-10000"> 5 000 – 10 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="z_budzet" value="10000-20000"> 10 000 – 20 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="z_budzet" value="powyzej 20000"> powyżej 20 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="z_budzet" value="trudno powiedziec"> trudno powiedzieć na tym etapie</label>
+                    </div>
+                </div>
+<h2>VII. BARIERY WDROŻENIOWE</h2>
+                <div class="form-group">
+                    <p class="question-label">Co mogłoby być największą barierą we wdrożeniu? (wybierz maks. 2)</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="z_bariery[]" value="Budzet" class="barrier-limit"> Budżet</label>
+                        <label class="choice-item"><input type="checkbox" name="z_bariery[]" value="Wymogi" class="barrier-limit"> Wymogi formalne / regulacyjne</label>
+                        <label class="choice-item"><input type="checkbox" name="z_bariery[]" value="Obawy" class="barrier-limit"> Obawy dotyczące bezpieczeństwa pacjentów</label>
+                        <label class="choice-item"><input type="checkbox" name="z_bariery[]" value="Zasoby" class="barrier-limit"> Brak zasobów technicznych</label>
+                        <label class="choice-item"><input type="checkbox" name="z_bariery[]" value="Czas" class="barrier-limit"> Czas wdrożenia</label>
+                        <label class="choice-item"><input type="checkbox" name="z_bariery[]" value="Brak" class="barrier-limit"> Nie widzimy istotnych barier</label>
+                    </div>
+                </div>
+
+                <h2>VIII. GOTOWOŚĆ DO WSPÓŁPRACY</h2>
+                <div class="form-group">
+                    <p class="question-label">Czy widzisz potencjał zastosowania XperiBase w działalności związanej ze zdrowiem, terapią lub dobrostanem?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_potencjal" value="Tak"> Tak, zdecydowanie</label>
+                        <label class="choice-item"><input type="radio" name="z_potencjal" value="Raczej"> Raczej tak</label>
+                        <label class="choice-item"><input type="radio" name="z_potencjal" value="Przyszlosc"> Być może w przyszłości</label>
+                        <label class="choice-item"><input type="radio" name="z_potencjal" value="Nie"> Raczej nie</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Czy widzisz sens dalszej rozmowy, prezentacji lub testowego wdrożenia?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_rozmowa" value="Tak"> Tak</label>
+                        <label class="choice-item"><input type="radio" name="z_rozmowa" value="Pozniej"> Być może później</label>
+                        <label class="choice-item"><input type="radio" name="z_rozmowa" value="Nie"> Nie</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="question-label">Czy byliby Państwo skłonni wystawić krótki list polecający dotyczący naszego produktu, wskazujący, że jest to rozwiązanie warte dalszego rozwoju i upowszechniania (na potrzeby wniosku o grant europejski)?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="z_list_polecajacy" value="Tak"> Tak</label>
+                        <label class="choice-item"><input type="radio" name="z_list_polecajacy" value="Nie"> Nie</label>
+                    </div>
+                </div>
+
+                <h2>IX. WARUNEK IDEALNEGO DOPASOWANIA</h2>
+                <div class="form-group">
+                    <p class="question-label">Co musiałoby się wydarzyć, aby XperiBase było rozwiązaniem idealnie dopasowanym do potrzeb Twojej organizacji lub praktyki terapeutycznej? (jedno zdanie / myśl)</p>
+                    <textarea name="z_warunek" rows="3" placeholder="Twoja odpowiedź..."></textarea>
+                </div>
+            </div>
+
+
+            <!-- ================= SEGMENT 6: SEKTOR PUBLICZNY ================= -->
+            <div id="section-publiczny" class="segment-section">
+                <h1 style="font-size: 1.6rem; text-align: center; text-transform: uppercase;">ANKIETA – DOŚWIADCZENIA SPOŁECZNE I PUBLICZNE W NOWYM WYMIARZE</h1>
+                <p style="text-align: center; color: #d4af37; font-weight: 500; margin-top: 1rem; margin-bottom: 0.5rem;">Czas wypełnienia: ok. 5–7 minut</p>
+                <p style="text-align: center; font-weight: 300; font-size: 0.95rem; margin-bottom: 3rem; color: rgba(255,255,255,0.85); max-width: 800px; margin-left: auto; margin-right: auto;">
+                    Ankieta ma charakter eksploracyjny i pomoże nam tworzyć rozwiązania wspierające dostępne, angażujące i nowoczesne formy komunikacji, edukacji oraz doświadczeń społecznych.
+                </p>
+
+                <h2>I. METRYCZKA – O TOBIE I TWOJEJ INSTYTUCJI</h2>
+                <div class="form-group">
+                    <p class="question-label">Jakie stanowisko zajmujesz?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_stanowisko" value="Dyrektor"> Dyrektor / Dyrektorka instytucji</label>
+                        <label class="choice-item"><input type="radio" name="p_stanowisko" value="Kierownik"> Kierownik działu / jednostki</label>
+                        <label class="choice-item"><input type="radio" name="p_stanowisko" value="Koordynator"> Koordynator projektów społecznych lub edukacyjnych</label>
+                        <label class="choice-item"><input type="radio" name="p_stanowisko" value="Komunikacja"> Specjalista ds. komunikacji / promocji</label>
+                        <label class="choice-item"><input type="radio" name="p_stanowisko" value="Dostepnosc"> Specjalista ds. dostępności</label>
+                        <label class="choice-item"><input type="radio" name="p_stanowisko" value="Merytoryczny"> Pracownik merytoryczny</label>
+                        <input type="text" name="p_stanowisko_inne" placeholder="Inne (jakie?)" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Profil instytucji / organizacji (można zaznaczyć kilka):</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="p_profil[]" value="JST"> Jednostka samorządu terytorialnego</label>
+                        <label class="choice-item"><input type="checkbox" name="p_profil[]" value="Publiczna"> Instytucja publiczna / państwowa</label>
+                        <label class="choice-item"><input type="checkbox" name="p_profil[]" value="Kultura"> Instytucja kultury finansowana publicznie</label>
+                        <label class="choice-item"><input type="checkbox" name="p_profil[]" value="NGO"> Organizacja pozarządowa (NGO)</label>
+                        <label class="choice-item"><input type="checkbox" name="p_profil[]" value="Spoleczne"> Centrum społeczne / obywatelskie</label>
+                        <label class="choice-item"><input type="checkbox" name="p_profil[]" value="Edukacyjna"> Instytucja edukacyjno‑informacyjna</label>
+                        <input type="text" name="p_profil_inne" placeholder="Inne" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Skala działania:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_skala" value="lokalna"> lokalna</label>
+                        <label class="choice-item"><input type="radio" name="p_skala" value="regionalna"> regionalna</label>
+                        <label class="choice-item"><input type="radio" name="p_skala" value="krajowa"> ogólnokrajowa</label>
+                        <label class="choice-item"><input type="radio" name="p_skala" value="intl"> międzynarodowa</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Forma kontaktu z odbiorcami / mieszkańcami:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_forma" value="stacjonarna"> stacjonarna</label>
+                        <label class="choice-item"><input type="radio" name="p_forma" value="mobilna"> mobilna / plenerowa</label>
+                        <label class="choice-item"><input type="radio" name="p_forma" value="hybrydowa"> hybrydowa</label>
+                        <label class="choice-item"><input type="radio" name="p_forma" value="czasowa"> czasowa / projektowa</label>
+                        <label class="choice-item"><input type="radio" name="p_forma" value="stala"> stała</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Szacunkowa liczba odbiorców rocznie:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_odbiorcy" value="do 5k"> do 5 tys.</label>
+                        <label class="choice-item"><input type="radio" name="p_odbiorcy" value="5-20k"> 5–20 tys.</label>
+                        <label class="choice-item"><input type="radio" name="p_odbiorcy" value="20-100k"> 20–100 tys.</label>
+                        <label class="choice-item"><input type="radio" name="p_odbiorcy" value="100k+"> powyżej 100 tys.</label>
+                    </div>
+                </div>
+
+                <h2>II. WYZWANIA W KOMUNIKACJI I DOŚWIADCZENIU SPOŁECZNYM</h2>
+                <div class="form-group">
+                    <p class="question-label">Czy obecnie identyfikujecie wyzwania związane z angażowaniem odbiorców lub dostępnością działań instytucji?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_wyzwania_ident" value="Zdecydowanie tak"> Zdecydowanie tak</label>
+                        <label class="choice-item"><input type="radio" name="p_wyzwania_ident" value="Raczej tak"> Raczej tak</label>
+                        <label class="choice-item"><input type="radio" name="p_wyzwania_ident" value="Raczej nie"> Raczej nie</label>
+                        <label class="choice-item"><input type="radio" name="p_wyzwania_ident" value="Nie"> Nie</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Które z poniższych wyzwań są istotne? (można zaznaczyć kilka)</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="p_wyzwania_ist[]" value="Angazowanie"> Niskie zaangażowanie odbiorców w działania instytucji</label>
+                        <label class="choice-item"><input type="checkbox" name="p_wyzwania_ist[]" value="Pasywnosc"> Pasywne formy komunikacji i edukacji</label>
+                        <label class="choice-item"><input type="checkbox" name="p_wyzwania_ist[]" value="Dotarcie"> Trudność w dotarciu do różnych grup społecznych</label>
+                        <label class="choice-item"><input type="checkbox" name="p_wyzwania_ist[]" value="Dostepnosc"> Ograniczona dostępność dla osób z niepełnosprawnościami</label>
+                        <label class="choice-item"><input type="checkbox" name="p_wyzwania_ist[]" value="Zapamietywalnosc"> Niska zapamiętywalność treści informacyjnych lub edukacyjnych</label>
+                        <label class="choice-item"><input type="checkbox" name="p_wyzwania_ist[]" value="Formaty"> Brak nowoczesnych, angażujących formatów</label>
+                        <label class="choice-item"><input type="checkbox" name="p_wyzwania_ist[]" value="Misja Tech"> Trudność w łączeniu misji publicznej z nową technologią</label>
+                        <input type="text" name="p_wyzwania_inne" placeholder="Inne" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <h2>III. PIERWSZE WRAŻENIE – XPERIBASE</h2>
+                <div class="form-group">
+                    <p class="question-label">Jak oceniasz potencjalne dopasowanie XperiBase do potrzeb Twojej instytucji lub organizacji społecznej?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_wrazenie" value="Bardzo wysokie"> Bardzo wysokie</label>
+                        <label class="choice-item"><input type="radio" name="p_wrazenie" value="Wysokie"> Wysokie</label>
+                        <label class="choice-item"><input type="radio" name="p_wrazenie" value="Trudno powiedziec"> Trudno powiedzieć</label>
+                        <label class="choice-item"><input type="radio" name="p_wrazenie" value="Niskie"> Niskie</label>
+                        <label class="choice-item"><input type="radio" name="p_wrazenie" value="Niedopasowane"> Niedopasowane</label>
+                    </div>
+                </div>
+
+                <h2>IV. PRIORYTETY W PROJEKTOWANIU DOŚWIADCZEŃ PUBLICZNYCH</h2>
+                <p style="text-align: center; font-size: 0.9rem; color: #d4af37; margin-bottom: 1.5rem; font-style: italic;">
+                    W skali od 1 (nieważne) do 5 (kluczowe) oceń wagę poniższych elementów w działaniach instytucji.
+                </p>
+                <table class="table-scale">
+                    <thead><tr><th class="row-head">Obszar</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                    <tbody>
+                        <tr><td class="row-head">Zrozumiałość i czytelność przekazu</td><td data-label="1"><input type="radio" name="pp_zrozumialosc" value="1"></td><td data-label="2"><input type="radio" name="pp_zrozumialosc" value="2"></td><td data-label="3"><input type="radio" name="pp_zrozumialosc" value="3"></td><td data-label="4"><input type="radio" name="pp_zrozumialosc" value="4"></td><td data-label="5"><input type="radio" name="pp_zrozumialosc" value="5"></td></tr>
+                        <tr><td class="row-head">Aktywne zaangażowanie odbiorców</td><td data-label="1"><input type="radio" name="pp_aktywne" value="1"></td><td data-label="2"><input type="radio" name="pp_aktywne" value="2"></td><td data-label="3"><input type="radio" name="pp_aktywne" value="3"></td><td data-label="4"><input type="radio" name="pp_aktywne" value="4"></td><td data-label="5"><input type="radio" name="pp_aktywne" value="5"></td></tr>
+                        <tr><td class="row-head">Wielozmysłowe (multisensoryczne) formy komunikacji</td><td data-label="1"><input type="radio" name="pp_wielozmyslowe" value="1"></td><td data-label="2"><input type="radio" name="pp_wielozmyslowe" value="2"></td><td data-label="3"><input type="radio" name="pp_wielozmyslowe" value="3"></td><td data-label="4"><input type="radio" name="pp_wielozmyslowe" value="4"></td><td data-label="5"><input type="radio" name="pp_wielozmyslowe" value="5"></td></tr>
+                        <tr><td class="row-head">Zapamiętywalność treści edukacyjnych / informacyjnych</td><td data-label="1"><input type="radio" name="pp_zapam" value="1"></td><td data-label="2"><input type="radio" name="pp_zapam" value="2"></td><td data-label="3"><input type="radio" name="pp_zapam" value="3"></td><td data-label="4"><input type="radio" name="pp_zapam" value="4"></td><td data-label="5"><input type="radio" name="pp_zapam" value="5"></td></tr>
+                        <tr><td class="row-head">Dostępność i inkluzywność</td><td data-label="1"><input type="radio" name="pp_dostepnosc" value="1"></td><td data-label="2"><input type="radio" name="pp_dostepnosc" value="2"></td><td data-label="3"><input type="radio" name="pp_dostepnosc" value="3"></td><td data-label="4"><input type="radio" name="pp_dostepnosc" value="4"></td><td data-label="5"><input type="radio" name="pp_dostepnosc" value="5"></td></tr>
+                        <tr><td class="row-head">Spójność z misją publiczną instytucji</td><td data-label="1"><input type="radio" name="pp_spojnosc" value="1"></td><td data-label="2"><input type="radio" name="pp_spojnosc" value="2"></td><td data-label="3"><input type="radio" name="pp_spojnosc" value="3"></td><td data-label="4"><input type="radio" name="pp_spojnosc" value="4"></td><td data-label="5"><input type="radio" name="pp_spojnosc" value="5"></td></tr>
+                        <tr><td class="row-head">Możliwość dotarcia do różnych grup społecznych</td><td data-label="1"><input type="radio" name="pp_dotarcie" value="1"></td><td data-label="2"><input type="radio" name="pp_dotarcie" value="2"></td><td data-label="3"><input type="radio" name="pp_dotarcie" value="3"></td><td data-label="4"><input type="radio" name="pp_dotarcie" value="4"></td><td data-label="5"><input type="radio" name="pp_dotarcie" value="5"></td></tr>
+                    </tbody>
+                </table>
+
+                <h2>V. DOPASOWANIE XPERIBASE DO POTRZEB SEKTORA PUBLICZNEGO</h2>
+                <p style="text-align: center; font-size: 0.85rem; opacity: 0.7; margin-bottom: 1.5rem;">
+                    W jakim stopniu XperiBase odpowiada na poniższe potrzeby Twojej instytucji?<br>
+                    Skala: 1 – wcale | 2 – w niewielkim stopniu | 3 – częściowo | 4 – w dużym stopniu | 5 – w pełni
+                </p>
+                <table class="table-scale">
+                    <thead><tr><th class="row-head">Potrzeba</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                    <tbody>
+                        <tr><td class="row-head">Aktywizacja odbiorców zamiast pasywnego przekazu</td><td data-label="1"><input type="radio" name="pm_aktyw" value="1"></td><td data-label="2"><input type="radio" name="pm_aktyw" value="2"></td><td data-label="3"><input type="radio" name="pm_aktyw" value="3"></td><td data-label="4"><input type="radio" name="pm_aktyw" value="4"></td><td data-label="5"><input type="radio" name="pm_aktyw" value="5"></td></tr>
+                        <tr><td class="row-head">Nowoczesne formy edukacji obywatelskiej</td><td data-label="1"><input type="radio" name="pm_edukacja" value="1"></td><td data-label="2"><input type="radio" name="pm_edukacja" value="2"></td><td data-label="3"><input type="radio" name="pm_edukacja" value="3"></td><td data-label="4"><input type="radio" name="pm_edukacja" value="4"></td><td data-label="5"><input type="radio" name="pm_edukacja" value="5"></td></tr>
+                        <tr><td class="row-head">Zwiększenie zapamiętywalności treści publicznych</td><td data-label="1"><input type="radio" name="pm_zapam" value="1"></td><td data-label="2"><input type="radio" name="pm_zapam" value="2"></td><td data-label="3"><input type="radio" name="pm_zapam" value="3"></td><td data-label="4"><input type="radio" name="pm_zapam" value="4"></td><td data-label="5"><input type="radio" name="pm_zapam" value="5"></td></tr>
+                        <tr><td class="row-head">Wsparcie dostępności (różne potrzeby sensoryczne)</td><td data-label="1"><input type="radio" name="pm_dostepnosc" value="1"></td><td data-label="2"><input type="radio" name="pm_dostepnosc" value="2"></td><td data-label="3"><input type="radio" name="pm_dostepnosc" value="3"></td><td data-label="4"><input type="radio" name="pm_dostepnosc" value="4"></td><td data-label="5"><input type="radio" name="pm_dostepnosc" value="5"></td></tr>
+                        <tr><td class="row-head">Technologia bezpieczna i nienachalna</td><td data-label="1"><input type="radio" name="pm_tech" value="1"></td><td data-label="2"><input type="radio" name="pm_tech" value="2"></td><td data-label="3"><input type="radio" name="pm_tech" value="3"></td><td data-label="4"><input type="radio" name="pm_tech" value="4"></td><td data-label="5"><input type="radio" name="pm_tech" value="5"></td></tr>
+                        <tr><td class="row-head">Możliwość adaptacji do różnych przestrzeni i wydarzeń</td><td data-label="1"><input type="radio" name="pm_adapt" value="1"></td><td data-label="2"><input type="radio" name="pm_adapt" value="2"></td><td data-label="3"><input type="radio" name="pm_adapt" value="3"></td><td data-label="4"><input type="radio" name="pm_adapt" value="4"></td><td data-label="5"><input type="radio" name="pm_adapt" value="5"></td></tr>
+                        <tr><td class="row-head">Zgodność z wartościami i misją publiczną</td><td data-label="1"><input type="radio" name="pm_zgodnosc" value="1"></td><td data-label="2"><input type="radio" name="pm_zgodnosc" value="2"></td><td data-label="3"><input type="radio" name="pm_zgodnosc" value="3"></td><td data-label="4"><input type="radio" name="pm_zgodnosc" value="4"></td><td data-label="5"><input type="radio" name="pm_zgodnosc" value="5"></td></tr>
+                    </tbody>
+                </table>
+
+                <h2>VI. MODEL WSPÓŁPRACY</h2>
+                <div class="form-group">
+                    <p class="question-label">Która forma współpracy z XperiBase byłaby dla Was najbardziej naturalna?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_model_coll" value="Stale"> Stałe wdrożenie w przestrzeni publicznej</label>
+                        <label class="choice-item"><input type="radio" name="p_model_coll" value="Czasowy"> Projekt czasowy / pilotażowy</label>
+                        <label class="choice-item"><input type="radio" name="p_model_coll" value="Wydarzenia"> Rozwiązanie do wydarzeń społecznych lub edukacyjnych</label>
+                        <label class="choice-item"><input type="radio" name="p_model_coll" value="Grantowa"> Współpraca grantowa / projektowa</label>
+                        <input type="text" name="p_model_inne" placeholder="Inny model" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Który element współpracy miałby dla Was największą wartość?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_wartosc" value="Komunikacja"> Nowa forma komunikacji z mieszkańcami / odbiorcami</label>
+                        <label class="choice-item"><input type="radio" name="p_wartosc" value="Dostepnosc"> Wsparcie dostępności i inkluzywności</label>
+                        <label class="choice-item"><input type="radio" name="p_wartosc" value="Edukacja"> Technologia wspierająca edukację i informację</label>
+                        <label class="choice-item"><input type="radio" name="p_wartosc" value="Angazowanie"> Zwiększenie zaangażowania społecznego</label>
+                        <label class="choice-item"><input type="radio" name="p_wartosc" value="Efekt"> Efekt społeczny i edukacyjny</label>
+                    </div>
+                </div>
+
+                
+                <div class="form-group">
+                    <p class="question-label">Biorąc pod uwagę potencjał Multisensorycznego Nośnika Doświadczeń XperiBase oraz możliwe zastosowania w Państwa organizacji, jaki poziom budżetu byliby Państwo skłonni przeznaczyć na takie rozwiązanie?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_budzet" value="do 5000"> do 5 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="p_budzet" value="5000-10000"> 5 000 – 10 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="p_budzet" value="10000-20000"> 10 000 – 20 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="p_budzet" value="powyzej 20000"> powyżej 20 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="p_budzet" value="trudno powiedziec"> trudno powiedzieć na tym etapie</label>
+                    </div>
+                </div>
+<h2>VII. BARIERY WDROŻENIOWE</h2>
+                <div class="form-group">
+                    <p class="question-label">Co mogłoby być największą barierą we wdrożeniu? (wybierz maks. 2)</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="p_bariery[]" value="Budzet" class="barrier-limit"> Budżet</label>
+                        <label class="choice-item"><input type="checkbox" name="p_bariery[]" value="Procedury" class="barrier-limit"> Procedury formalne / zamówienia publiczne</label>
+                        <label class="choice-item"><input type="checkbox" name="p_bariery[]" value="Ograniczenia" class="barrier-limit"> Ograniczenia organizacyjne</label>
+                        <label class="choice-item"><input type="checkbox" name="p_bariery[]" value="Zasoby" class="barrier-limit"> Brak zasobów technicznych</label>
+                        <label class="choice-item"><input type="checkbox" name="p_bariery[]" value="Wiedza" class="barrier-limit"> Brak wiedzy / doświadczenia</label>
+                        <label class="choice-item"><input type="checkbox" name="p_bariery[]" value="Brak" class="barrier-limit"> Nie widzimy istotnych barier</label>
+                    </div>
+                </div>
+
+                <h2>VIII. GOTOWOŚĆ DO WSPÓŁPRACY</h2>
+                <div class="form-group">
+                    <p class="question-label">Czy widzisz potencjał zastosowania XperiBase w działaniach Twojej instytucji lub organizacji społecznej?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_potencjal" value="Tak"> Tak, zdecydowanie</label>
+                        <label class="choice-item"><input type="radio" name="p_potencjal" value="Raczej"> Raczej tak</label>
+                        <label class="choice-item"><input type="radio" name="p_potencjal" value="Przyszlosc"> Być może w przyszłości</label>
+                        <label class="choice-item"><input type="radio" name="p_potencjal" value="Nie"> Raczej nie</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Czy widzisz sens dalszej rozmowy, prezentacji lub projektu pilotażowego?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_rozmowa" value="Tak"> Tak</label>
+                        <label class="choice-item"><input type="radio" name="p_rozmowa" value="Pozniej"> Być może później</label>
+                        <label class="choice-item"><input type="radio" name="p_rozmowa" value="Nie"> Nie</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="question-label">Czy byliby Państwo skłonni wystawić krótki list polecający dotyczący naszego produktu, wskazujący, że jest to rozwiązanie warte dalszego rozwoju i upowszechniania (na potrzeby wniosku o grant europejski)?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="p_list_polecajacy" value="Tak"> Tak</label>
+                        <label class="choice-item"><input type="radio" name="p_list_polecajacy" value="Nie"> Nie</label>
+                    </div>
+                </div>
+
+                <h2>IX. WARUNEK IDEALNEGO DOPASOWANIA</h2>
+                <div class="form-group">
+                    <p class="question-label">Co musiałoby się wydarzyć, aby XperiBase było rozwiązaniem idealnie dopasowanym do potrzeb Twojej instytucji lub organizacji społecznej? (jedno zdanie / myśl)</p>
+                    <textarea name="p_warunek" rows="3" placeholder="Twoja odpowiedź..."></textarea>
+                </div>
+            </div>
+
+
+            <!-- ================= SEGMENT 7: INNE / NIESTANDARDOWE FORMATY ================= -->
+            <div id="section-inne" class="segment-section">
+                <h1 style="font-size: 1.6rem; text-align: center; text-transform: uppercase;">ANKIETA – PRZESTRZENIE DOŚWIADCZEŃ I FORMATY NIESTANDARDOWE</h1>
+                <p style="text-align: center; color: #d4af37; font-weight: 500; margin-top: 1rem; margin-bottom: 0.5rem;">Czas wypełnienia: ok. 5–7 minut</p>
+                <p style="text-align: center; font-weight: 300; font-size: 0.95rem; margin-bottom: 3rem; color: rgba(255,255,255,0.85); max-width: 800px; margin-left: auto; margin-right: auto;">
+                    Ankieta ma charakter eksploracyjny i pomoże nam zrozumieć niestandardowe, interdyscyplinarne projekty oraz tworzyć rozwiązania dopasowane do unikalnych formatów doświadczeń.
+                </p>
+
+                <h2>I. METRYCZKA – O TOBIE I TWOIM PROJEKCIE</h2>
+                <div class="form-group">
+                    <p class="question-label">Jaką rolę pełnisz w projekcie / organizacji?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_rola" value="Founder"> Founder / Inicjator projektu</label>
+                        <label class="choice-item"><input type="radio" name="i_rola" value="Dyrektor"> Dyrektor / Lider zespołu</label>
+                        <label class="choice-item"><input type="radio" name="i_rola" value="Projektant"> Projektant doświadczeń / kurator</label>
+                        <label class="choice-item"><input type="radio" name="i_rola" value="Producent"> Producent / koordynator projektu</label>
+                        <label class="choice-item"><input type="radio" name="i_rola" value="Strateg"> Strateg / innowator</label>
+                        <input type="text" name="i_rola_inna" placeholder="Inna rola (jaka?)" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Charakter projektu / przestrzeni (można zaznaczyć kilka):</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="i_charakter[]" value="Przestrzen"> Przestrzeń doświadczeń / immersion space</label>
+                        <label class="choice-item"><input type="checkbox" name="i_charakter[]" value="Interdyscyplinarny"> Projekt interdyscyplinarny</label>
+                        <label class="choice-item"><input type="checkbox" name="i_charakter[]" value="Instalacja"> Instalacja czasowa / pop‑up</label>
+                        <label class="choice-item"><input type="checkbox" name="i_charakter[]" value="Laboratorium"> Laboratorium innowacji / R&D</label>
+                        <label class="choice-item"><input type="checkbox" name="i_charakter[]" value="Art_tech"> Projekt art‑tech / creative tech</label>
+                        <label class="choice-item"><input type="checkbox" name="i_charakter[]" value="Format_edu"> Format edukacyjno‑społeczny</label>
+                        <input type="text" name="i_charakter_inne" placeholder="Inne (jakie?)" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Skala projektu:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_skala" value="eksperymentalna"> eksperymentalna / pilotażowa</label>
+                        <label class="choice-item"><input type="radio" name="i_skala" value="mala"> mała</label>
+                        <label class="choice-item"><input type="radio" name="i_skala" value="srednia"> średnia</label>
+                        <label class="choice-item"><input type="radio" name="i_skala" value="duza"> duża / wieloetapowa</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Forma działania:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_forma" value="stacjonarna"> stacjonarna</label>
+                        <label class="choice-item"><input type="radio" name="i_forma" value="czasowa"> czasowa</label>
+                        <label class="choice-item"><input type="radio" name="i_forma" value="mobilna"> mobilna</label>
+                        <label class="choice-item"><input type="radio" name="i_forma" value="hybrydowa"> hybrydowa</label>
+                        <label class="choice-item"><input type="radio" name="i_forma" value="site_specific"> site‑specific</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Szacunkowa liczba odbiorców / użytkowników rocznie:</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_odbiorcy" value="do 1k"> do 1 tys.</label>
+                        <label class="choice-item"><input type="radio" name="i_odbiorcy" value="1-5k"> 1–5 tys.</label>
+                        <label class="choice-item"><input type="radio" name="i_odbiorcy" value="5-20k"> 5–20 tys.</label>
+                        <label class="choice-item"><input type="radio" name="i_odbiorcy" value="powyzej 20k"> powyżej 20 tys.</label>
+                    </div>
+                </div>
+
+                <h2>II. WYZWANIA W TWORZENIU PRZESTRZENI DOŚWIADCZEŃ</h2>
+                <div class="form-group">
+                    <p class="question-label">Czy obecnie identyfikujecie wyzwania związane z projektowaniem lub realizacją doświadczeń?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_wyzwania_ident" value="Zdecydowanie tak"> Zdecydowanie tak</label>
+                        <label class="choice-item"><input type="radio" name="i_wyzwania_ident" value="Raczej tak"> Raczej tak</label>
+                        <label class="choice-item"><input type="radio" name="i_wyzwania_ident" value="Raczej nie"> Raczej nie</label>
+                        <label class="choice-item"><input type="radio" name="i_wyzwania_ident" value="Nie"> Nie</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Które z poniższych wyzwań są istotne? (można zaznaczyć kilka)</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="i_wyzwania_ist[]" value="Przekladanie idei"> Trudność w przekładaniu idei na realne doświadczenie</label>
+                        <label class="choice-item"><input type="checkbox" name="i_wyzwania_ist[]" value="Narzedzia"> Ograniczone narzędzia do pracy multisensorycznej</label>
+                        <label class="choice-item"><input type="checkbox" name="i_wyzwania_ist[]" value="Brak technologii"> Brak technologii dopasowanej do niestandardowych formatów</label>
+                        <label class="choice-item"><input type="checkbox" name="i_wyzwania_ist[]" value="Angazowanie"> Trudność w angażowaniu odbiorców w sposób aktywny</label>
+                        <label class="choice-item"><input type="checkbox" name="i_wyzwania_ist[]" value="Ograniczenia"> Ograniczenia przestrzenne lub techniczne</label>
+                        <label class="choice-item"><input type="checkbox" name="i_wyzwania_ist[]" value="Skalowanie"> Trudność w skalowaniu lub adaptacji projektu</label>
+                        <label class="choice-item"><input type="checkbox" name="i_wyzwania_ist[]" value="Szyte na miare"> Brak rozwiązań „szytych na miarę”</label>
+                        <input type="text" name="i_wyzwania_inne" placeholder="Inne" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <h2>III. PIERWSZE WRAŻENIE – XPERIBASE</h2>
+                <div class="form-group">
+                    <p class="question-label">Jak oceniasz potencjalne dopasowanie XperiBase do charakteru Twojego projektu lub przestrzeni?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_wrazenie" value="Bardzo wysokie"> Bardzo wysokie</label>
+                        <label class="choice-item"><input type="radio" name="i_wrazenie" value="Wysokie"> Wysokie</label>
+                        <label class="choice-item"><input type="radio" name="i_wrazenie" value="Trudno powiedziec"> Trudno powiedzieć</label>
+                        <label class="choice-item"><input type="radio" name="i_wrazenie" value="Niskie"> Niskie</label>
+                        <label class="choice-item"><input type="radio" name="i_wrazenie" value="Niedopasowane"> Niedopasowane</label>
+                    </div>
+                </div>
+
+                <h2>IV. PRIORYTETY W PROJEKTOWANIU DOŚWIADCZEŃ</h2>
+                <p style="text-align: center; font-size: 0.9rem; color: #d4af37; margin-bottom: 1.5rem; font-style: italic;">
+                    W skali od 1 (nieważne) do 5 (kluczowe) oceń wagę poniższych elementów w Twoim projekcie.
+                </p>
+                <table class="table-scale">
+                    <thead><tr><th class="row-head">Obszar</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                    <tbody>
+                        <tr><td class="row-head">Aktywne uczestnictwo odbiorcy</td><td data-label="1"><input type="radio" name="ip_aktywne" value="1"></td><td data-label="2"><input type="radio" name="ip_aktywne" value="2"></td><td data-label="3"><input type="radio" name="ip_aktywne" value="3"></td><td data-label="4"><input type="radio" name="ip_aktywne" value="4"></td><td data-label="5"><input type="radio" name="ip_aktywne" value="5"></td></tr>
+                        <tr><td class="row-head">Multisensoryczność (więcej niż obraz i dźwięk)</td><td data-label="1"><input type="radio" name="ip_multi" value="1"></td><td data-label="2"><input type="radio" name="ip_multi" value="2"></td><td data-label="3"><input type="radio" name="ip_multi" value="3"></td><td data-label="4"><input type="radio" name="ip_multi" value="4"></td><td data-label="5"><input type="radio" name="ip_multi" value="5"></td></tr>
+                        <tr><td class="row-head">Zapamiętywalność i intensywność doświadczenia</td><td data-label="1"><input type="radio" name="ip_zapam" value="1"></td><td data-label="2"><input type="radio" name="ip_zapam" value="2"></td><td data-label="3"><input type="radio" name="ip_zapam" value="3"></td><td data-label="4"><input type="radio" name="ip_zapam" value="4"></td><td data-label="5"><input type="radio" name="ip_zapam" value="5"></td></tr>
+                        <tr><td class="row-head">Eksperyment i innowacyjność</td><td data-label="1"><input type="radio" name="ip_eksperyment" value="1"></td><td data-label="2"><input type="radio" name="ip_eksperyment" value="2"></td><td data-label="3"><input type="radio" name="ip_eksperyment" value="3"></td><td data-label="4"><input type="radio" name="ip_eksperyment" value="4"></td><td data-label="5"><input type="radio" name="ip_eksperyment" value="5"></td></tr>
+                        <tr><td class="row-head">Elastyczność i możliwość adaptacji</td><td data-label="1"><input type="radio" name="ip_elastycznosc" value="1"></td><td data-label="2"><input type="radio" name="ip_elastycznosc" value="2"></td><td data-label="3"><input type="radio" name="ip_elastycznosc" value="3"></td><td data-label="4"><input type="radio" name="ip_elastycznosc" value="4"></td><td data-label="5"><input type="radio" name="ip_elastycznosc" value="5"></td></tr>
+                        <tr><td class="row-head">Spójność doświadczenia jako całości</td><td data-label="1"><input type="radio" name="ip_spojnosc" value="1"></td><td data-label="2"><input type="radio" name="ip_spojnosc" value="2"></td><td data-label="3"><input type="radio" name="ip_spojnosc" value="3"></td><td data-label="4"><input type="radio" name="ip_spojnosc" value="4"></td><td data-label="5"><input type="radio" name="ip_spojnosc" value="5"></td></tr>
+                        <tr><td class="row-head">Unikalność formy (trudna do powielenia)</td><td data-label="1"><input type="radio" name="ip_unikalnosc" value="1"></td><td data-label="2"><input type="radio" name="ip_unikalnosc" value="2"></td><td data-label="3"><input type="radio" name="ip_unikalnosc" value="3"></td><td data-label="4"><input type="radio" name="ip_unikalnosc" value="4"></td><td data-label="5"><input type="radio" name="ip_unikalnosc" value="5"></td></tr>
+                    </tbody>
+                </table>
+
+                <h2>V. DOPASOWANIE XPERIBASE DO POTRZEB PROJEKTU</h2>
+                <p style="text-align: center; font-size: 0.85rem; opacity: 0.7; margin-bottom: 1.5rem;">
+                    W jakim stopniu XperiBase odpowiada na poniższe potrzeby Twojego projektu?<br>
+                    Skala: 1 – wcale | 2 – w niewielkim stopniu | 3 – częściowo | 4 – w dużym stopniu | 5 – w pełni
+                </p>
+                <table class="table-scale">
+                    <thead><tr><th class="row-head">Potrzeba</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                    <tbody>
+                        <tr><td class="row-head">Tworzenie multisensorycznych doświadczeń</td><td data-label="1"><input type="radio" name="im_tworzenie" value="1"></td><td data-label="2"><input type="radio" name="im_tworzenie" value="2"></td><td data-label="3"><input type="radio" name="im_tworzenie" value="3"></td><td data-label="4"><input type="radio" name="im_tworzenie" value="4"></td><td data-label="5"><input type="radio" name="im_tworzenie" value="5"></td></tr>
+                        <tr><td class="row-head">Elastyczne dopasowanie do niestandardowych przestrzeni</td><td data-label="1"><input type="radio" name="im_elastyczne" value="1"></td><td data-label="2"><input type="radio" name="im_elastyczne" value="2"></td><td data-label="3"><input type="radio" name="im_elastyczne" value="3"></td><td data-label="4"><input type="radio" name="im_elastyczne" value="4"></td><td data-label="5"><input type="radio" name="im_elastyczne" value="5"></td></tr>
+                        <tr><td class="row-head">Wsparcie projektów eksperymentalnych</td><td data-label="1"><input type="radio" name="im_wsparcie" value="1"></td><td data-label="2"><input type="radio" name="im_wsparcie" value="2"></td><td data-label="3"><input type="radio" name="im_wsparcie" value="3"></td><td data-label="4"><input type="radio" name="im_wsparcie" value="4"></td><td data-label="5"><input type="radio" name="im_wsparcie" value="5"></td></tr>
+                        <tr><td class="row-head">Możliwość customizacji rozwiązania</td><td data-label="1"><input type="radio" name="im_custom" value="1"></td><td data-label="2"><input type="radio" name="im_custom" value="2"></td><td data-label="3"><input type="radio" name="im_custom" value="3"></td><td data-label="4"><input type="radio" name="im_custom" value="4"></td><td data-label="5"><input type="radio" name="im_custom" value="5"></td></tr>
+                        <tr><td class="row-head">Technologia jako integralna część narracji</td><td data-label="1"><input type="radio" name="im_tech" value="1"></td><td data-label="2"><input type="radio" name="im_tech" value="2"></td><td data-label="3"><input type="radio" name="im_tech" value="3"></td><td data-label="4"><input type="radio" name="im_tech" value="4"></td><td data-label="5"><input type="radio" name="im_tech" value="5"></td></tr>
+                        <tr><td class="row-head">Łączenie świata fizycznego i cyfrowego (phygital)</td><td data-label="1"><input type="radio" name="im_phygital" value="1"></td><td data-label="2"><input type="radio" name="im_phygital" value="2"></td><td data-label="3"><input type="radio" name="im_phygital" value="3"></td><td data-label="4"><input type="radio" name="im_phygital" value="4"></td><td data-label="5"><input type="radio" name="im_phygital" value="5"></td></tr>
+                        <tr><td class="row-head">Skalowalność lub replikowalność projektu</td><td data-label="1"><input type="radio" name="im_skala" value="1"></td><td data-label="2"><input type="radio" name="im_skala" value="2"></td><td data-label="3"><input type="radio" name="im_skala" value="3"></td><td data-label="4"><input type="radio" name="im_skala" value="4"></td><td data-label="5"><input type="radio" name="im_skala" value="5"></td></tr>
+                    </tbody>
+                </table>
+
+                <h2>VI. MODEL WSPÓŁPRACY</h2>
+                <div class="form-group">
+                    <p class="question-label">Która forma współpracy z XperiBase byłaby dla Was najbardziej naturalna?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_model_coll" value="Eksperyment"> Projekt eksperymentalny / pilotaż</label>
+                        <label class="choice-item"><input type="radio" name="i_model_coll" value="Szyte na miare"> Rozwiązanie szyte na miarę</label>
+                        <label class="choice-item"><input type="radio" name="i_model_coll" value="Wspoltworzenie"> Współtworzenie koncepcji i technologii</label>
+                        <label class="choice-item"><input type="radio" name="i_model_coll" value="Partnerstwo"> Partnerstwo długofalowe</label>
+                        <input type="text" name="i_model_inne" placeholder="Inny model" style="max-width: 100%; margin-top: 5px; text-align: left;" onfocus="clearCheckboxes(this)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Który element współpracy miałby dla Was największą wartość?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_wartosc" value="Narzedzie"> Narzędzie do pracy z doświadczeniem</label>
+                        <label class="choice-item"><input type="radio" name="i_wartosc" value="Technologia"> Technologia wspierająca eksperyment</label>
+                        <label class="choice-item"><input type="radio" name="i_wartosc" value="Unikalne"> Możliwość tworzenia unikalnych formatów</label>
+                        <label class="choice-item"><input type="radio" name="i_wartosc" value="Wsparcie"> Wsparcie koncepcyjne i projektowe</label>
+                        <label class="choice-item"><input type="radio" name="i_wartosc" value="Efekt"> Efekt i reakcja odbiorców</label>
+                    </div>
+                </div>
+
+                
+                <div class="form-group">
+                    <p class="question-label">Biorąc pod uwagę potencjał Multisensorycznego Nośnika Doświadczeń XperiBase oraz możliwe zastosowania w Państwa organizacji, jaki poziom budżetu byliby Państwo skłonni przeznaczyć na takie rozwiązanie?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_budzet" value="do 5000"> do 5 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="i_budzet" value="5000-10000"> 5 000 – 10 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="i_budzet" value="10000-20000"> 10 000 – 20 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="i_budzet" value="powyzej 20000"> powyżej 20 000 zł</label>
+                        <label class="choice-item"><input type="radio" name="i_budzet" value="trudno powiedziec"> trudno powiedzieć na tym etapie</label>
+                    </div>
+                </div>
+<h2>VII. BARIERY WDROŻENIOWE</h2>
+                <div class="form-group">
+                    <p class="question-label">Co mogłoby być największą barierą we współpracy? (wybierz maks. 2)</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="checkbox" name="i_bariery[]" value="Budzet" class="barrier-limit"> Budżet</label>
+                        <label class="choice-item"><input type="checkbox" name="i_bariery[]" value="Niepewnosc" class="barrier-limit"> Niepewność efektu</label>
+                        <label class="choice-item"><input type="checkbox" name="i_bariery[]" value="Ograniczenia" class="barrier-limit"> Ograniczenia techniczne</label>
+                        <label class="choice-item"><input type="checkbox" name="i_bariery[]" value="Zlozonosc" class="barrier-limit"> Złożoność projektu</label>
+                        <label class="choice-item"><input type="checkbox" name="i_bariery[]" value="Czas" class="barrier-limit"> Czas realizacji</label>
+                        <label class="choice-item"><input type="checkbox" name="i_bariery[]" value="Brak" class="barrier-limit"> Nie widzimy istotnych barier</label>
+                    </div>
+                </div>
+
+                <h2>VIII. GOTOWOŚĆ DO WSPÓŁPRACY</h2>
+                <div class="form-group">
+                    <p class="question-label">Czy widzisz potencjał zastosowania XperiBase w swoim projekcie lub przyszłych realizacjach?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_potencjal" value="Tak"> Tak, zdecydowanie</label>
+                        <label class="choice-item"><input type="radio" name="i_potencjal" value="Raczej"> Raczej tak</label>
+                        <label class="choice-item"><input type="radio" name="i_potencjal" value="Przyszlosc"> Być może w przyszłości</label>
+                        <label class="choice-item"><input type="radio" name="i_potencjal" value="Nie"> Raczej nie</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p class="question-label">Czy widzisz sens dalszej rozmowy, demo lub wspólnego eksperymentu?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_rozmowa" value="Tak"> Tak</label>
+                        <label class="choice-item"><input type="radio" name="i_rozmowa" value="Pozniej"> Być może później</label>
+                        <label class="choice-item"><input type="radio" name="i_rozmowa" value="Nie"> Nie</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p class="question-label">Czy byliby Państwo skłonni wystawić krótki list polecający dotyczący naszego produktu, wskazujący, że jest to rozwiązanie warte dalszego rozwoju i upowszechniania (na potrzeby wniosku o grant europejski)?</p>
+                    <div class="choices-stack">
+                        <label class="choice-item"><input type="radio" name="i_list_polecajacy" value="Tak"> Tak</label>
+                        <label class="choice-item"><input type="radio" name="i_list_polecajacy" value="Nie"> Nie</label>
+                    </div>
+                </div>
+
+                <h2>IX. WARUNEK IDEALNEGO DOPASOWANIA</h2>
+                <div class="form-group">
+                    <p class="question-label">Co musiałoby się wydarzyć, aby XperiBase było rozwiązaniem idealnie dopasowanym do Twojego projektu lub formatu doświadczenia? (jedno zdanie / myśl)</p>
+                    <textarea name="i_warunek" rows="3" placeholder="Twoja odpowiedź..."></textarea>
+                </div>
+            </div>
+
+
+            <!-- ================= ZGODA NA KONTAKT I PRZYCISK (WSPÓLNE DLA WSZYSTKICH) ================= -->
+            <div id="common-footer">
+                <div id="contact-wrapper" style="margin-top: 5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px;">
+                    <div class="form-group">
+                        <p class="question-label" style="text-align: center; color: #FFF;">Czy zgadzasz się na ewentualny kontakt w sprawie rozmowy lub projektu pilotażowego?</p>
+                        <div class="choices-stack" style="flex-direction: row; justify-content: center; gap: 40px; min-width: auto;">
+                            <label class="choice-item">Tak <input type="radio" name="zgoda_kontakt" value="Tak" onchange="toggleContact(true)"></label>
+                            <label class="choice-item">Nie <input type="radio" name="zgoda_kontakt" value="Nie" onchange="toggleContact(false)"></label>
+                        </div>
+                    </div>
+
+                    <div id="contact-block">
+                        <div class="form-group">
+                            <p class="question-label">Dane kontaktowe / nazwa organizacji (opcjonalnie):</p>
+                            <input type="text" name="organizacja" placeholder="Nazwa firmy / instytucji">
+                        </div>
+                        <div class="form-group">
+                            <p class="question-label">E-mail lub nr telefonu (inny preferowany kontakt):</p>
+                            <input type="text" name="dane_kontaktowe" placeholder="Twoje dane kontaktowe">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-send">Prześlij ankietę</button>
+                <div id="form-validation-message" class="form-validation-message">Prosimy uzupełnić przynajmniej 3 odpowiedzi w ankiecie przed wysłaniem.</div>
+            </div>
+        </form>
+
+        <p style="font-size: 0.8rem; color: rgba(255,255,255,0.4); text-align: center; margin-top: 4rem;">
+            &copy; 2026 XperiBase Sp. z o.o. Wszelkie prawa zastrzeżone.
+        </p>
+    </div>
+</div>
+
+    <!-- NAWIGACJA -->
+    <nav id="main-nav" class="fullscreen-nav">
+        <ul class="nav-list">
+      <li><a href="index.html" onclick="closeMenu()">Start</a></li>
+      <li><a href="mission.html" onclick="closeMenu()">Misja</a></li>
+      <li><a href="project.html" onclick="closeMenu()">Projekt</a></li>
+      <li><a href="development.html" onclick="closeMenu()">Proces B+R</a></li>
+      <li><a href="team.html" onclick="closeMenu()">Zespół</a></li>
+      <li><a href="gallery.html" onclick="closeMenu()">Galeria</a></li>
+      <li><a href="education.html" onclick="closeMenu()">Edukacja</a></li>
+      <li><a href="partnership.html" onclick="closeMenu()">Partnerstwo</a></li>
+      <li><a href="survey.html" onclick="closeMenu()">Twój głos</a></li>
+    </nav>
+
+    <script>
+        // Logika Menu Hamburger
+        const menuBtn = document.getElementById('menuBtn');
+        const nav = document.getElementById('main-nav');
+        let isMenuOpen = false;
+
+        menuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            menuBtn.classList.toggle('active');
+            nav.classList.toggle('open');
+            document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+        });
+
+        // Funkcja czyszcząca inne wybory w tej samej sekcji (pytaniu)
+        function clearCheckboxes(inputElement) {
+            const group = inputElement.closest('.form-group');
+            if (group) {
+                // Odznacz wszystkie checkboxy i radio w tej grupie
+                group.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(el => {
+                    el.checked = false;
+                });
+            }
+        }
+
+        // Start Ankiety
+        function runSurvey() {
+            const select = document.getElementById('segment-select');
+            const val = select.value;
+            if (!val) return;
+
+            document.getElementById('intro-view').style.display = 'none';
+            document.getElementById('survey-form').style.display = 'block';
+            document.getElementById('hidden_segment').value = val;
+
+            // Ukryj wszystkie sekcje
+            document.querySelectorAll('.segment-section').forEach(s => s.style.display = 'none');
+
+            // Pokaz właściwą sekcję na podstawie wartości selecta
+            if (val === 'kultura') {
+                document.getElementById('section-kultura').style.display = 'block';
+            } else if (val === 'edukacja') {
+                document.getElementById('section-edukacja').style.display = 'block';
+            } else if (val === 'zdrowie') {
+                document.getElementById('section-zdrowie').style.display = 'block';
+            } else if (val === 'sektor_publiczny') {
+                document.getElementById('section-publiczny').style.display = 'block';
+            } else if (val === 'inne') {
+                document.getElementById('section-inne').style.display = 'block';
+            } else {
+                document.getElementById('section-kultura').style.display = 'block'; // Fallback
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        function toggleContact(show) {
+            document.getElementById('contact-block').style.display = show ? 'block' : 'none';
+        }
+
+        // Limit do 2 barier we wszystkich sekcjach
+        const barrierInputs = document.querySelectorAll('.barrier-limit');
+        barrierInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                const parentGroup = input.closest('.form-group');
+                if (parentGroup) {
+                    const checked = parentGroup.querySelectorAll('.barrier-limit:checked');
+                    if (checked.length > 2) {
+                        input.checked = false;
+                    }
+                    // Jeśli ktoś zaznaczy checkbox, wyczyść pole tekstowe "Inne" w tej grupie
+                    const otherText = parentGroup.querySelector('input[type="text"]');
+                    if(otherText) otherText.value = '';
+                }
+            });
+        });
+
+        function getActiveSegmentSection() {
+            const sections = document.querySelectorAll('.segment-section');
+            for (const section of sections) {
+                if (window.getComputedStyle(section).display !== 'none') {
+                    return section;
+                }
+            }
+            return null;
+        }
+
+        function countAnsweredFieldsInSection(section) {
+            if (!section) return 0;
+
+            let count = 0;
+            const handledNames = new Set();
+            const fields = section.querySelectorAll('input, textarea, select');
+
+            fields.forEach(field => {
+                const name = field.name;
+                if (!name || handledNames.has(name) || field.disabled || field.type === 'hidden') return;
+
+                if (name === 'zgoda_kontakt' || name === 'organizacja' || name === 'dane_kontaktowe') return;
+
+                if (field.type === 'radio') {
+                    const group = section.querySelectorAll('input[type="radio"][name="' + name.replace(/"/g, '\\"') + '"]');
+                    if ([...group].some(el => el.checked)) count += 1;
+                    handledNames.add(name);
+                    return;
+                }
+
+                if (field.type === 'checkbox') {
+                    const group = section.querySelectorAll('input[type="checkbox"][name="' + name.replace(/"/g, '\\"') + '"]');
+                    if ([...group].some(el => el.checked)) count += 1;
+                    handledNames.add(name);
+                    return;
+                }
+
+                if (field.tagName === 'TEXTAREA' || field.type === 'text' || field.tagName === 'SELECT') {
+                    if ((field.value || '').trim() !== '') count += 1;
+                    handledNames.add(name);
+                }
+            });
+
+            return count;
+        }
+
+        const surveyForm = document.getElementById('survey-form');
+        const validationMessage = document.getElementById('form-validation-message');
+
+        surveyForm.addEventListener('submit', function(e) {
+            const segment = document.getElementById('hidden_segment').value;
+            const activeSection = getActiveSegmentSection();
+            const answeredCount = countAnsweredFieldsInSection(activeSection);
+
+            if (!segment || answeredCount < 3) {
+                e.preventDefault();
+                validationMessage.style.display = 'block';
+                validationMessage.textContent = 'Prosimy uzupełnić przynajmniej 3 odpowiedzi w ankiecie przed wysłaniem.';
+                validationMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            validationMessage.style.display = 'none';
+        });
+
+        surveyForm.addEventListener('input', function() {
+            const activeSection = getActiveSegmentSection();
+            if (countAnsweredFieldsInSection(activeSection) >= 3) {
+                validationMessage.style.display = 'none';
+            }
+        });
+
+</script>
+</body>
+</html>
+```

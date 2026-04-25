@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polityka prywatności | XperiBase.uk</title>
+  <meta name="description" content="Polityka prywatności serwisu XperiBase.uk" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Brand config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'xb-cream': '#FDFBF7',
+            'xb-dark': '#1A1A1A',
+            'xb-grey': '#F2F0EB',
+            'xb-accent': '#3D3D3D',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FDFBF7;
+      color: #1A1A1A;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* --- HEADER / LOGO / MENU (spójne z resztą stron) --- */
+    .logo-row {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      padding: 10px 40px;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 2rem;
+      background: rgba(253, 251, 247, 0.92);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .main-logo {
+      height: 90px;
+      width: auto;
+      display: block;
+      transition: height 0.3s ease;
+    }
+
+    .hamburger-menu {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 40px;
+      height: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0;
+      z-index: 90;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger-menu span {
+      display: block;
+      width: 100%;
+      height: 3px;
+      background-color: #000000; /* czarne na jasnym tle */
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger-menu:hover span { background-color: #2c2c2c; }
+
+    .hamburger-menu.active span { background-color: #000000; }
+    .hamburger-menu.active span:nth-child(1) { transform: translateY(13.5px) rotate(45deg); }
+    .hamburger-menu.active span:nth-child(2) { opacity: 0; }
+    .hamburger-menu.active span:nth-child(3) { transform: translateY(-13.5px) rotate(-45deg); }
+
+    .fullscreen-nav {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: #F4F1EA;
+      z-index: 85;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .fullscreen-nav.open { opacity: 1; visibility: visible; }
+
+    .nav-list {
+      list-style: none;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+    }
+
+    .nav-list li {
+      margin: 20px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+    }
+
+    .fullscreen-nav.open .nav-list li {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fullscreen-nav.open .nav-list li:nth-child(1) { transition-delay: 0.1s; }
+    .fullscreen-nav.open .nav-list li:nth-child(2) { transition-delay: 0.2s; }
+    .fullscreen-nav.open .nav-list li:nth-child(3) { transition-delay: 0.3s; }
+    .fullscreen-nav.open .nav-list li:nth-child(4) { transition-delay: 0.4s; }
+    .fullscreen-nav.open .nav-list li:nth-child(5) { transition-delay: 0.5s; }
+
+    .nav-list a {
+      color: #000000;
+      text-decoration: none;
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      position: relative;
+    }
+
+    .nav-list a:hover {
+      font-style: italic;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 8px;
+    }
+
+    /* RWD */
+    @media (max-width: 1024px) {
+      .logo-row { padding: 10px 30px; }
+      .main-logo { height: 75px; }
+    }
+
+    @media (max-width: 600px) {
+      .logo-row {
+        justify-content: space-between;
+        width: 100%;
+        padding: 10px 20px;
+      }
+      .main-logo { height: 56px; }
+      .hamburger-menu { width: 30px; height: 22px; }
+      .hamburger-menu span { height: 2px; }
+      .hamburger-menu.active span:nth-child(1) { transform: translateY(10px) rotate(45deg); }
+      .hamburger-menu.active span:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
+      .nav-list a { font-size: 2rem; }
+    }
+
+    /* Accessibility */
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid #1A1A1A;
+      outline-offset: 2px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .skip-link {
+      position: absolute;
+      top: -40px; left: 0;
+      background: #1A1A1A; color: white;
+      padding: 8px; z-index: 200;
+      transition: top 0.3s;
+    }
+    .skip-link:focus { top: 0; }
+  </style>
+</head>
+
+<body class="antialiased">
+  <a href="#main-content" class="skip-link">Przejdź do treści</a>
+
+  <!-- HEADER -->
+  <div class="logo-row">
+    <a href="index.html" aria-label="XperiBase — strona główna">
+      <img src="GRAPH/xperibase_blanc.png" alt="XperiBase Studio Logo" class="main-logo">
+    </a>
+
+    <button class="hamburger-menu"
+            aria-label="Otwórz / zamknij menu nawigacji"
+            aria-expanded="false"
+            aria-controls="main-nav"
+            id="menuBtn">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- MENU OVERLAY -->
+  <nav id="main-nav" class="fullscreen-nav" aria-label="Główna nawigacja">
+    <ul class="nav-list">
+      <li><a href="index.html" onclick="closeMenu()">Home</a></li>
+      <li><a href="mission.html" onclick="closeMenu()">The Mission</a></li>
+      <li><a href="project.html" onclick="closeMenu()">The Project</a></li>
+      <li><a href="team.html" onclick="closeMenu()">The Team</a></li>
+      <li><a href="partnership.html" onclick="closeMenu()">Partnership</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content" class="pt-[120px]">
+    <div class="max-w-4xl mx-auto px-6 py-16">
+
+      <h1 class="text-4xl md:text-5xl font-serif font-bold mb-10">
+        Polityka prywatności
+      </h1>
+
+      <p class="mb-6">
+        XperiBase.uk zobowiązuje się do ochrony Twojej prywatności. Niniejsza polityka wyjaśnia,
+        w jaki sposób zbieramy, wykorzystujemy i chronimy dane osobowe.
+      </p>
+
+      <h2 class="text-2xl font-serif font-semibold mt-12 mb-4">
+        1. Jakie dane zbieramy
+      </h2>
+
+      <p class="mb-4">
+        Możemy zbierać ograniczony zakres danych osobowych, gdy:
+      </p>
+
+      <ul class="list-disc pl-6 mb-6">
+        <li>Kontaktujesz się z nami e-mailem</li>
+        <li>Przesyłasz informacje przez formularz na stronie (jeśli jest dostępny)</li>
+        <li>Korzystasz ze strony (podstawowe dane analityczne, jeśli analityka jest włączona)</li>
+      </ul>
+
+      <p class="mb-6">
+        Może to obejmować imię i nazwisko, adres e-mail oraz treść Twojej wiadomości.
+      </p>
+
+      <h2 class="text-2xl font-serif font-semibold mt-12 mb-4">
+        2. Jak wykorzystujemy dane
+      </h2>
+
+      <p class="mb-6">
+        Dane osobowe wykorzystujemy wyłącznie w celu:
+      </p>
+
+      <ul class="list-disc pl-6 mb-6">
+        <li>Odpowiadania na zapytania</li>
+        <li>Rozwijania partnerstw i współpracy</li>
+        <li>Ulepszania funkcjonalności strony</li>
+      </ul>
+
+      <p class="mb-6">
+        Nie sprzedajemy, nie wynajmujemy ani nie handlujemy danymi osobowymi.
+      </p>
+
+      <h2 class="text-2xl font-serif font-semibold mt-12 mb-4">
+        3. Podstawa prawna (UK GDPR)
+      </h2>
+
+      <p class="mb-6">
+        W stosownych przypadkach dane osobowe są przetwarzane na podstawie prawnie uzasadnionego interesu
+        (odpowiadanie na zapytania i utrzymywanie komunikacji),
+        albo na podstawie zgody — jeśli jest ona wyraźnie udzielona.
+      </p>
+
+      <h2 class="text-2xl font-serif font-semibold mt-12 mb-4">
+        4. Bezpieczeństwo danych
+      </h2>
+
+      <p class="mb-6">
+        Stosujemy rozsądne środki techniczne i organizacyjne, aby chronić dane osobowe
+        przed utratą, niewłaściwym użyciem lub nieuprawnionym dostępem.
+      </p>
+
+      <h2 class="text-2xl font-serif font-semibold mt-12 mb-4">
+        5. Twoje prawa
+      </h2>
+
+      <p class="mb-6">
+        W dowolnym momencie możesz poprosić o dostęp do swoich danych, ich sprostowanie lub usunięcie,
+        kontaktując się z nami.
+      </p>
+
+      <h2 class="text-2xl font-serif font-semibold mt-12 mb-4">
+        6. Kontakt
+      </h2>
+
+      <p class="mb-6">
+        W sprawach związanych z prywatnością skontaktuj się z nami:
+        <br>
+        <strong>contact@xperibase.com</strong>
+      </p>
+
+      <p class="mt-16 text-sm text-gray-500">
+        Ostatnia aktualizacja: luty 2026
+      </p>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-xb-dark text-gray-500 py-8 border-t border-gray-800 text-sm">
+      <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+        <p>&copy; 2024 XperiBase.uk. All Rights Reserved.</p>
+        <div class="mt-4 md:mt-0 space-x-6">
+          <!-- na tej stronie link jest zwykły (bez modala) -->
+          <a href="privacy.html" class="hover:text-white transition underline-offset-4 hover:underline" aria-current="page">
+            Privacy Policy
+          </a>
+
+          <a href="accessibility.html"
+             class="hover:text-white transition underline-offset-4 hover:underline"
+             data-modal="accessibilityModal">
+            Accessibility Statement
+          </a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- MODAL: Accessibility -->
+  <div id="accessibilityModal" class="fixed inset-0 z-[999] hidden" role="dialog" aria-modal="true" aria-labelledby="accessTitle">
+    <div class="absolute inset-0 bg-black/60" onclick="closeModal()" aria-hidden="true"></div>
+
+    <div class="relative mx-auto my-10 max-w-3xl w-[92%] bg-xb-cream text-xb-dark border border-gray-200 shadow-2xl">
+      <div class="flex items-start justify-between gap-6 p-6 border-b border-gray-200">
+        <h2 id="accessTitle" class="text-2xl md:text-3xl font-serif font-bold">Accessibility Statement</h2>
+        <button type="button" class="text-xb-dark hover:opacity-70" onclick="closeModal()" aria-label="Close Accessibility Statement">✕</button>
+      </div>
+
+      <div class="p-6 md:p-8 max-h-[70vh] overflow-auto text-base text-gray-800 leading-relaxed">
+        <p class="mb-4">
+          XperiBase is committed to accessibility — both in our artworks and online. Accessibility is a foundation of the project, not an add-on.
+        </p>
+
+        <h3 class="text-lg font-bold mt-6 mb-2">1. Website accessibility</h3>
+        <p class="mb-4">We aim to follow WCAG 2.1 AA principles where feasible. This includes:</p>
+        <ul class="list-disc pl-6 mb-4">
+          <li>Readable typography and clear hierarchy</li>
+          <li>High colour contrast</li>
+          <li>Keyboard navigation and focus indicators</li>
+          <li>Responsive layout</li>
+          <li>Alt text for meaningful images (where provided)</li>
+        </ul>
+
+        <h3 class="text-lg font-bold mt-6 mb-2">2. Feedback</h3>
+        <p class="mb-4">If you encounter barriers or need information in an alternative format, email: <strong>hello@xperibase.uk</strong></p>
+
+        <p class="text-sm text-gray-500 mt-10">Last updated: February 2026</p>
+      </div>
+
+      <div class="p-6 border-t border-gray-200 flex justify-between items-center">
+        <a href="accessibility.html" class="text-sm underline underline-offset-4 hover:opacity-80">
+          Open full page
+        </a>
+        <button type="button"
+                class="border border-xb-dark px-5 py-2 uppercase tracking-widest text-sm hover:bg-xb-dark hover:text-white transition"
+                onclick="closeModal()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS: Hamburger menu + Hybrid modal links -->
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const nav = document.getElementById('main-nav');
+    const menuLinks = nav.querySelectorAll('a');
+    let isMenuOpen = false;
+
+    function toggleMenu() {
+      isMenuOpen = !isMenuOpen;
+      menuBtn.classList.toggle('active');
+      nav.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', isMenuOpen);
+
+      if (isMenuOpen) {
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => menuLinks[0].focus(), 100);
+      } else {
+        document.body.style.overflow = '';
+        menuBtn.focus();
+      }
+    }
+
+    function closeMenu() {
+      if (isMenuOpen) toggleMenu();
+    }
+
+    menuBtn.addEventListener('click', toggleMenu);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isMenuOpen) toggleMenu();
+    });
+
+    // HYBRID MODALS
+    let activeModal = null;
+    let lastFocusEl = null;
+
+    function openModalById(id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+
+      lastFocusEl = document.activeElement;
+      activeModal = modal;
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+      const closeBtn = modal.querySelector('button[aria-label^="Close"]') || modal.querySelector('button');
+      if (closeBtn) setTimeout(() => closeBtn.focus(), 50);
+    }
+
+    function closeModal() {
+      if (!activeModal) return;
+      activeModal.classList.add('hidden');
+      document.body.style.overflow = '';
+      activeModal = null;
+      if (lastFocusEl) lastFocusEl.focus();
+    }
+
+    window.closeModal = closeModal;
+    window.closeMenu = closeMenu;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && activeModal) closeModal();
+    });
+
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[data-modal]');
+      if (!link) return;
+
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+      const modalId = link.getAttribute('data-modal');
+      const targetModal = document.getElementById(modalId);
+
+      if (targetModal) {
+        e.preventDefault();
+        openModalById(modalId);
+      }
+    });
+  </script>
+</body>
+</html>

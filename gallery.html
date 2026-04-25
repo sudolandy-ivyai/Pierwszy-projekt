@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galeria | XperiBase.pl</title>
+  <meta name="description" content="Poznaj multisensoryczne dzieła XperiBase: prototypy URSA oraz nadchodzące kolekcje." />
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <!-- Google Fonts: Playfair Display & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Brand config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'xb-cream': '#FDFBF7',
+            'xb-dark': '#1A1A1A',
+            'xb-grey': '#F2F0EB',
+            'xb-accent': '#3D3D3D',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FDFBF7;
+      color: #1A1A1A;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* --- FIXED HEADER --- */
+    .logo-row {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      padding: 15px 40px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 2rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .logo-row.scrolled {
+      background: rgba(26, 26, 26, 0.85);
+      backdrop-filter: blur(12px);
+      padding: 8px 40px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-logo {
+      height: 120px;
+      width: auto;
+      display: block;
+      transition: height 0.4s ease;
+    }
+
+    .logo-row.scrolled .main-logo {
+      height: 60px;
+    }
+
+    .hamburger-menu {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 40px;
+      height: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0;
+      z-index: 110;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger-menu span {
+      display: block;
+      width: 100%;
+      height: 3px;
+      background-color: #FFFFFF;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger-menu.active span { background-color: #000000; }
+    .hamburger-menu.active span:nth-child(1) { transform: translateY(13.5px) rotate(45deg); }
+    .hamburger-menu.active span:nth-child(2) { opacity: 0; }
+    .hamburger-menu.active span:nth-child(3) { transform: translateY(-13.5px) rotate(-45deg); }
+
+    .fullscreen-nav {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: #F4F1EA;
+      z-index: 105;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .fullscreen-nav.open { opacity: 1; visibility: visible; }
+    .nav-list { list-style: none; text-align: center; padding: 0; }
+    .nav-list li { margin: 15px 0; opacity: 0; transform: translateY(20px); transition: all 0.4s ease; }
+    .fullscreen-nav.open .nav-list li { opacity: 1; transform: translateY(0); }
+    
+    .nav-list a {
+      color: #000000;
+      text-decoration: none;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 5vw, 3rem);
+    }
+
+    .nav-list a:hover { font-style: italic; text-decoration: underline; text-underline-offset: 8px; }
+
+    .gallery-item { cursor: pointer; overflow: hidden; position: relative; }
+    .gallery-item img { transition: transform 0.5s ease; }
+    .gallery-item:hover img { transform: scale(1.05); }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    .skip-link {
+      position: absolute;
+      top: -40px; left: 0; background: #1A1A1A; color: white; padding: 8px; z-index: 1000; transition: top 0.3s;
+    }
+    .skip-link:focus { top: 0; }
+
+    @media (max-width: 600px) {
+      .fullscreen-nav { padding: 100px 16px 30px; }
+      .nav-list li { margin: 18px 0; }
+      .logo-row { justify-content: space-between; width: 100%; padding: 10px 20px; }
+      .logo-row.scrolled { padding: 5px 20px; }
+      .main-logo { height: 70px; }
+      .logo-row.scrolled .main-logo { height: 50px; }
+      .hamburger-menu { width: 30px; height: 22px; }
+      .hamburger-menu span { height: 2px; }
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+  <a href="#main-content" class="skip-link">Przejdź do głównej treści</a>
+
+  <!-- HEADER -->
+  <header class="logo-row" id="header">
+    <a href="index.html" aria-label="Strona główna XperiBase">
+      <img src="GRAPH/xperibase_blanc.png" alt="Logo XperiBase Studio" class="main-logo">
+    </a>
+
+    <button class="hamburger-menu"
+            aria-label="Przełącz menu nawigacji"
+            aria-expanded="false"
+            aria-controls="main-nav"
+            id="menuBtn">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- MENU OVERLAY -->
+  <nav id="main-nav" class="fullscreen-nav" aria-label="Nawigacja główna">
+    <ul class="nav-list">
+      <li><a href="index.html" onclick="closeMenu()">Start</a></li>
+      <li><a href="mission.html" onclick="closeMenu()">Misja</a></li>
+      <li><a href="project.html" onclick="closeMenu()">Projekt</a></li>
+      <li><a href="development.html" onclick="closeMenu()">Proces B+R</a></li>
+      <li><a href="team.html" onclick="closeMenu()">Zespół</a></li>
+      <li><a href="gallery.html" onclick="closeMenu()">Galeria</a></li>
+      <li><a href="education.html" onclick="closeMenu()">Edukacja</a></li>
+      <li><a href="partnership.html" onclick="closeMenu()">Partnerstwo</a></li>
+      <li><a href="survey.html" onclick="closeMenu()">Twój głos</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+
+    <!-- HERO SECTION -->
+    <section class="relative bg-xb-dark pt-32 pb-0 text-center overflow-hidden min-h-[320px] flex items-end">
+      <div class="absolute inset-0 z-0">
+        <img src="GRAPH/hero_gallery.webp" 
+             alt="" 
+             class="w-full h-full object-cover opacity-85 brightness-125"
+             onerror="this.style.display='none';">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70"></div>
+      </div>
+
+      <div class="relative z-10 container mx-auto px-6 mb-8">
+        <h1 class="text-4xl md:text-6xl font-serif text-xb-cream mb-4 tracking-tight drop-shadow-lg">Galeria</h1>
+        <p class="text-white max-w-2xl mx-auto text-base md:text-lg font-light leading-relaxed drop-shadow-md">
+		Od prototypów technologicznych po wizję przyszłych kolekcji i realizacji.
+		Tam, gdzie technologia spotyka się z materią, zmysłami i przestrzenią.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 1: PROTOTYP URSA (Kompaktowy padding) -->
+    <section class="py-12 md:py-16 bg-xb-cream">
+      <div class="container mx-auto px-6">
+        
+        <!-- FLEX CONTAINER FOR TITLE AND AUDIO -->
+        <div class="mb-10 flex flex-col md:flex-row md:items-center gap-x-8 gap-y-6">
+          <div class="flex-shrink-0">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold mb-2">Prototyp URSA MINOR URSA MAJOR</h2>
+            
+            <a href="project.html#overview" class="inline-flex items-center text-xs font-semibold tracking-[0.2em] uppercase text-xb-accent hover:text-black transition-colors mb-4 group">
+              Przegląd projektu
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+
+            <div class="w-20 h-1 bg-xb-dark"></div>
+          </div>
+          
+          <div class="flex items-center gap-4 bg-xb-grey/40 p-3 rounded-full border border-xb-dark/5">
+              <span class="hidden sm:inline text-[10px] uppercase tracking-widest text-xb-dark font-bold ml-2">Audio</span>
+              <audio controls class="h-9">
+                  <source src="AUDIO/URSA.mp3" type="audio/mpeg">
+                  Twoja przeglądarka nie obsługuje odtwarzacza audio.
+              </audio>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Obraz 1 (Ursa 3) -->
+          <div class="gallery-item group" onclick="openGalleryModal('GRAPH/ursa3.webp', 'URSA TERRA / GŁĘBIA NIEBA', 'Obraz emanuje intensywnymi odcieniami niebieskiego, które oddają nocne niebo pełne głębi i spokoju. Gwiazdy zostały rozmieszczone z wyjątkową precyzją, zgodnie z faktycznym układem gwiazdozbiorów Wielkiej i Małej Niedźwiedzicy. Polaris, Gwiazda Polarna, jest centralnym punktem kompozycji, zarówno wizualnie, jak i symbolicznie, wybijając się ponad inne elementy. Obraz pokryty jest grubą warstwą farb olejnych- techniką superimpasto, która nadaje dziełu wyrazistości i wymiaru. To rozwiązanie pozwala nie tylko zobaczyć, ale i “poczuć” relief nieba oraz kontury gwiazd. Wyraziste linie wyznaczające kształty Wielkiej i Małej Niedźwiedzicy podkreślają harmonię między kosmosem a naturą')">
+            <img src="GRAPH/ursa3.webp" alt="Prototyp Ursa 3" class="w-full h-[500px] object-cover rounded-sm shadow-md" onerror="this.src='https://placehold.co/600x900/222/fff?text=Ursa+3';">
+            <div class="gallery-overlay">
+              <span class="text-white uppercase tracking-widest text-sm bg-black/50 px-4 py-2">Szczegóły</span>
+            </div>
+          </div>
+          <!-- Obraz 2 (Ursa 2) -->
+          <div class="gallery-item group" onclick="openGalleryModal('GRAPH/ursa2.webp', 'URSA MAJOR / INTERAKCJA', 'W słuchawkach można usłyszeć ogólny opis obrazu, jego kolorów, struktury i temperatur. Przy dotknięciu konkretnej gwiazdy odtwarzany jest jej opis: nazwa, wielkość, jasność i odległość od Ziemi. To unikalne połączenie sztuki, technologii i nauki sprawia, że obraz jest nie tylko oryginalny ale także interaktywny i edukacyjny. To dzieło to prawdziwy przełom w świecie sztuki multisensorycznej. Multisensoryczny obraz łączy w sobie piękno wizualne i technologiczne innowacje, umożliwiając interakcję na wielu poziomach')">
+            <img src="GRAPH/ursa2.webp" alt="Prototyp Ursa 2" class="w-full h-[500px] object-cover rounded-sm shadow-md" onerror="this.src='https://placehold.co/600x900/222/fff?text=Ursa+2';">
+            <div class="gallery-overlay">
+              <span class="text-white uppercase tracking-widest text-sm bg-black/50 px-4 py-2">Szczegóły</span>
+            </div>
+          </div>
+          <!-- Obraz 3 (Ursa 1) -->
+          <div class="gallery-item group" onclick="openGalleryModal('GRAPH/ursa1.webp', 'URSA MINOR / MULTISENSORYKA', 'Multisensoryczny, czyli wielozmysłowy. Angażuje: • Wzrok: Obraz przedstawia Wielką i Małą Niedźwiedzicę oraz gwiazdę Polaris, ukazane w pięknych odcieniach niebieskiego z teksturą superimpasto. • Dotyk: Dzięki wyraźnej strukturze, osoby niewidome mogą “zobaczyć” obraz dłońmi, odczuwając kontury gwiazd i kompozycji. • Temperatura: Obraz i gwiazdy mają różne temperatury — gwiazdy osiągają około 40°C, a Polaris 50°C, podczas gdy reszta obrazu pozostaje chłodna (8-10°C). • Zapach: Delikatny aromat ozonu, przypominający świeżość nieba, dopełnia doświadczenie. • Dźwięk: W słuchawkach można usłyszeć ogólny opis obrazu, jego kolorów, struktury i temperatur. Przy dotknięciu konkretnej gwiazdy odtwarzany jest jej opis: nazwa, wielkość, jasność i odległość od Ziemi.')">
+            <img src="GRAPH/ursa1.webp" alt="Prototyp Ursa 1" class="w-full h-[500px] object-cover rounded-sm shadow-md" onerror="this.src='https://placehold.co/600x900/222/fff?text=Ursa+1';">
+            <div class="gallery-overlay">
+              <span class="text-white uppercase tracking-widest text-sm bg-black/50 px-4 py-2">Szczegóły</span>
+            </div>
+          </div>
+          <!-- Obraz 4 (Ursa 4) -->
+          <div class="gallery-item group" onclick="openGalleryModal('GRAPH/ursa4.webp', 'URSA NOVA / KONSTELACJE', 'Centralnym motywem dzieła są dwie sylwetki niedźwiedzi, wykreślone liniami, które łączą ich kontury z układami gwiazd. To wyraźne odniesienie do konstelacji Wielkiej i Małej Niedźwiedzicy przywołuje poczucie bezpieczeństwa, jakbyśmy spoglądali na dobrze znane nam nocne niebo. Ciemnoniebieskie tło z delikatnymi przejściami tonalnymi buduje wyjątkowy klimat, nadając obrazowi jednocześnie spokój i dynamikę. Gwiazdy, rozświetlone złotym blaskiem, wyróżniają się na tle głębokiego błękitu. Przyciągają wzrok, tworząc subtelny punkt zaczepienia dla wyobraźni. Różnorodne temperatury obrazu wzmacniają jego wielowymiarowy odbiór – gwiazdy osiągają temperaturę około 45°C, a Gwiazda Polarna aż 50°C, podczas gdy reszta płótna pozostaje chłodna, w przedziale 8–10°C.')">
+            <img src="GRAPH/ursa4.webp" alt="Prototyp Ursa 4" class="w-full h-[500px] object-cover rounded-sm shadow-md" onerror="this.src='https://placehold.co/600x900/222/fff?text=Ursa+4';">
+            <div class="gallery-overlay">
+              <span class="text-white uppercase tracking-widest text-sm bg-black/50 px-4 py-2">Szczegóły</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: KOLEKCJA W PRZYGOTOWANIU (Kompaktowy padding) -->
+    <section id="kolekcja" class="py-12 md:py-16 bg-xb-grey">
+      <div class="container mx-auto px-6">
+        <div class="mb-10 text-left">
+          <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6 text-xb-dark">Projektowane realizacje</h2>
+          <p class="text-xb-accent text-base md:text-lg w-full max-w-4xl leading-relaxed">
+		Poniższe projekty pokazują kierunki rozwoju XperiBase. Projektujemy obiekty, które odbiorca będzie mógł eksplorować poprzez dotyk, zapach, temperaturę i dźwięk. Obecnie pracujemy nad pozyskaniem finansowania, które pozwoli przejść od wizualnych koncepcji do ich fizycznej realizacji w ramach prac badawczo‑rozwojowych.
+	  </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-6 gallery-item" onclick="openGalleryModal('GRAPH/jezioro.webp', 'Jezioro', 'Wizualizacja interaktywnej powierzchni wody. Projekt zakłada użycie modułów chłodzących dla oddania realizmu temperatury.')">
+            <img src="GRAPH/jezioro.webp" alt="Projekt Jezioro" class="w-full h-80 object-cover rounded-sm shadow-md" onerror="this.src='https://placehold.co/800x600/e2e2e2/1a1a1a?text=Jezioro';">
+            <div class="gallery-overlay"><span class="text-white text-sm bg-black/50 px-4 py-2 uppercase">Szczegóły</span></div>
+          </div>
+
+          <div class="lg:col-span-6 gallery-item" onclick="openGalleryModal('GRAPH/owoce.webp', 'Owoce', 'Eksploracja zapachu i tekstury w martwej naturze. Multisensoryczny model edukacyjny.')">
+            <img src="GRAPH/owoce.webp" alt="Projekt Owoce" class="w-full h-80 object-cover rounded-sm shadow-md" onerror="this.src='https://placehold.co/800x600/e2e2e2/1a1a1a?text=Owoce';">
+            <div class="gallery-overlay"><span class="text-white text-sm bg-black/50 px-4 py-2 uppercase">Szczegóły</span></div>
+          </div>
+
+          <div class="lg:col-span-3 gallery-item" onclick="openGalleryModal('GRAPH/kobiety.webp', 'Kobiety', 'Studium postaci. Praca nad odwzorowaniem ciepła ludzkiego ciała poprzez zintegrowaną elektronikę.')">
+            <img src="GRAPH/kobiety.webp" alt="Projekt Kobiety" class="w-full h-[500px] object-cover rounded-sm shadow-md" onerror="this.src='https://placehold.co/600x900/e2e2e2/1a1a1a?text=Kobiety';">
+            <div class="gallery-overlay"><span class="text-white text-sm bg-black/50 px-4 py-2 uppercase">Szczegóły</span></div>
+          </div>
+
+          <div class="lg:col-span-3 gallery-item" onclick="openGalleryModal('GRAPH/straznik.webp', 'Strażnik', 'Abstrakcyjna forma o silnym reliefie. Testy nawigacji dotykowej po skomplikowanych fakturach.')">
+            <img src="GRAPH/straznik.webp" alt="Projekt Strażnik" class="w-full h-[500px] object-cover rounded-sm shadow-md" onerror="this.src='https://placehold.co/600x900/e2e2e2/1a1a1a?text=Strażnik';">
+            <div class="gallery-overlay"><span class="text-white text-sm bg-black/50 px-4 py-2 uppercase">Szczegóły</span></div>
+          </div>
+
+          <div class="lg:col-span-6 gallery-item" onclick="openGalleryModal('GRAPH/makieta.webp', 'Makieta', 'Model instalacji przestrzennej XperiBase przeznaczonej do muzeów i galerii.')">
+            <img src="GRAPH/makieta.webp" alt="Makieta projektu" class="w-full h-[500px] object-cover rounded-sm shadow-md" onerror="this.src='https://placehold.co/800x600/e2e2e2/1a1a1a?text=Makieta';">
+            <div class="gallery-overlay"><span class="text-white text-sm bg-black/50 px-4 py-2 uppercase">Szczegóły</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-xb-dark text-gray-500 py-10 border-t border-gray-800 text-xs">
+      <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+        <p class="uppercase tracking-widest">&copy; 2026 XperiBase.pl. Wszelkie prawa zastrzeżone.</p>
+        <div class="flex gap-6 uppercase tracking-widest">
+          <a href="privacy.html" class="hover:text-white transition underline-offset-4 hover:underline">Polityka prywatności</a>
+          <a href="accessibility.html" class="hover:text-white transition underline-offset-4 hover:underline">Deklaracja dostępności</a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- LIGHTBOX / GALLERY MODAL -->
+  <div id="galleryModal" class="fixed inset-0 z-[999] hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/95" onclick="closeGalleryModal()"></div>
+    
+    <div id="modalContainer" class="relative bg-xb-cream shadow-2xl overflow-auto md:overflow-hidden w-full max-w-[95vw] md:max-w-7xl h-auto md:max-h-[90vh] flex flex-col md:flex-row transition-all duration-300">
+      
+      <button onclick="closeGalleryModal()" class="absolute top-4 right-4 z-[100] text-3xl hover:opacity-50 transition p-2 bg-white/20 md:bg-transparent rounded-full md:text-xb-dark">✕</button>
+
+      <div id="modalImgWrapper" class="w-full md:w-[60%] bg-black flex items-center justify-center min-h-[300px] md:h-full">
+        <img id="modalImg" src="" alt="" class="max-w-full max-h-[80vh] md:max-h-[85vh] object-contain">
+      </div>
+      
+      <div id="modalInfoWrapper" class="w-full md:w-[40%] p-8 md:p-12 flex flex-col justify-start bg-xb-cream border-t md:border-t-0 md:border-l border-gray-100 overflow-y-auto">
+        <div>
+            <h3 id="modalTitle" class="text-2xl md:text-3xl font-serif font-bold mb-6 border-b border-xb-dark/20 pb-4"></h3>
+            <div id="modalDesc" class="text-gray-700 text-base md:text-lg leading-relaxed mb-8 whitespace-pre-line text-left"></div>
+            <button onclick="closeGalleryModal()" class="w-full py-3 border border-xb-dark uppercase tracking-widest text-xs font-bold hover:bg-xb-dark hover:text-white transition">
+                Zamknij
+            </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const nav = document.getElementById('main-nav');
+    const header = document.getElementById('header');
+    let isMenuOpen = false;
+
+    // SCROLL LOGIC FOR NAV
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    function toggleMenu() {
+      isMenuOpen = !isMenuOpen;
+      menuBtn.classList.toggle('active');
+      nav.classList.toggle('open');
+      document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+    }
+
+    function closeMenu() { if (isMenuOpen) toggleMenu(); }
+    menuBtn.addEventListener('click', toggleMenu);
+
+    // GALLERY LIGHTBOX LOGIC
+    const galleryModal = document.getElementById('galleryModal');
+    const modalImg = document.getElementById('modalImg');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+
+    function openGalleryModal(src, title, desc) {
+      galleryModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+      modalImg.src = src;
+      modalImg.alt = title;
+      modalTitle.innerText = title;
+      modalDesc.innerHTML = desc.replace(/•/g, '<br>•').replace(/\./g, '. ');
+      
+      modalImg.onerror = function() {
+          if (!this.src.includes('placehold.co')) {
+             this.src = `https://placehold.co/1200x1800/222/fff?text=${encodeURIComponent(title)}`;
+          }
+      };
+    }
+
+    function closeGalleryModal() {
+      galleryModal.classList.add('hidden');
+      document.body.style.overflow = '';
+      modalImg.src = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (isMenuOpen) closeMenu();
+        closeGalleryModal();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="XperiBase PL | Przekształcamy sztukę abstrakcyjną dzięki haptyce i technologii.">
+    
+    <!-- Tagi Open Graph -->
+    <meta property="og:title" content="XperiBase | Sztuka ożywiana dotykiem">
+    <meta property="og:description" content="Nowy standard dostępności i doświadczeń w kulturze, sztuce i edukacji dzięki platformie multisensorycznej.">
+    <meta property="og:image" content="https://xperibase.com/GRAPH/xperibase_blanc.png">
+    <meta property="og:url" content="https://xperibase.com/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <title>XperiBase PL</title>
+    
+    <!-- Linia Favicon SVG -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 1. RESET & BAZA --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            background-color: #000;
+            font-family: 'Playfair Display', serif;
+            color: #FFF;
+            overflow-x: hidden;
+        }
+
+        /* --- 2. DOSTĘPNOŚĆ --- */
+        a:focus-visible, button:focus-visible {
+            outline: 3px solid #FFF;
+            outline-offset: 4px;
+            border-radius: 2px;
+        }
+
+        /* --- 3. TŁO I WARSTWY --- */
+        .background-image {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('GRAPH/tlo.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 1;
+            opacity: 0.75;
+        }
+
+        .contrast-overlay {
+            position: fixed;
+            top: 0; right: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom left, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .content-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-end;
+            padding: 20px 40px 20px;
+        }
+
+        /* --- 4. HEADER / LOGO (FIXED) --- */
+        .logo-row {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            padding: 15px 40px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .logo-row.scrolled {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            padding: 8px 40px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-logo {
+            height: 140px;
+            width: auto;
+            display: block;
+            transition: height 0.4s ease;
+        }
+
+        .logo-row.scrolled .main-logo {
+            height: 60px;
+        }
+
+        .hamburger-menu {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 40px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0;
+            z-index: 110;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: #FFFFFF;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu:hover span { background-color: #e0e0e0; }
+        .hamburger-menu.active span { background-color: #000000; }
+        .hamburger-menu.active span:nth-child(1) { transform: translateY(13.5px) rotate(45deg); }
+        .hamburger-menu.active span:nth-child(2) { opacity: 0; }
+        .hamburger-menu.active span:nth-child(3) { transform: translateY(-13.5px) rotate(-45deg); }
+
+        /* --- 5. LOGO HUB OF TALENTS --- */
+        .hot-logo-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 40px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 50;
+            transition: transform 0.3s ease;
+        }
+
+        .hot-logo-btn:hover { transform: scale(1.05); }
+
+        .hot-logo {
+            height: 70px;
+            width: auto;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        /* --- 6. CONTENT --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-end;
+            max-width: 1100px;
+            width: 100%;
+            margin-top: 150px; /* Kompensacja dla fixed logo */
+        }
+
+        h2 {
+            color: #FFFFFF;
+            font-weight: 400;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            line-height: 1.2;
+            text-align: right;
+            letter-spacing: 0.02em;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+            margin-bottom: 0;
+        }
+
+        .hero-subtitle {
+            display: block;
+            font-size: 0.6em; 
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            margin-top: 1rem;
+            opacity: 0.95;
+            line-height: 1.5;
+            letter-spacing: 0.01em;
+        }
+
+        /* --- 7. STOPKA --- */
+        .legal-footer {
+            width: 100%;
+            text-align: right;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(0.7rem, 2vw, 0.85rem);
+            font-weight: 300;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            margin-top: 40px;
+        }
+
+        .legal-footer p { margin: 0.3rem 0; }
+        .legal-footer a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            transition: border-color 0.3s;
+        }
+        .legal-footer a:hover { border-bottom-color: #fff; }
+
+        .nip-regon { font-weight: 500; color: #fff; }
+
+        .footer-lastline {
+            position: relative;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            width: 100%;
+            margin-top: 0.3rem;
+        }
+
+        .footer-tagline {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: rgba(255, 255, 255, 0.92);
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+            white-space: nowrap;
+            margin: 0;
+        }
+
+        .footer-copyright {
+            opacity: 0.6;
+            font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            white-space: nowrap;
+        }
+
+        /* --- 8. MENU PEŁNOEKRANOWE --- */
+        .fullscreen-nav {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #F4F1EA;
+            z-index: 105;
+            display: block;
+            padding: 120px 20px 40px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .fullscreen-nav.open { opacity: 1; visibility: visible; }
+        .nav-list {
+            list-style: none;
+            text-align: center;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .nav-list li {
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+        }
+        .fullscreen-nav.open .nav-list li { opacity: 1; transform: translateY(0); }
+
+        .nav-list a {
+            color: #000000;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 6vw, 3rem);
+            position: relative;
+        }
+
+        .nav-list a:hover {
+            font-style: italic;
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 8px;
+        }
+
+        /* --- 9. MODAL HUB OF TALENTS --- */
+        .hot-modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .hot-modal-overlay.open { opacity: 1; visibility: visible; }
+
+        .hot-modal-content {
+            background-color: #1A1A1A;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 550px;
+            width: 90%;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            text-align: left;
+        }
+
+        .hot-modal-overlay.open .hot-modal-content { transform: translateY(0); }
+
+        .hot-modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: transparent; border: none;
+            color: #FFFFFF; font-size: 2rem;
+            cursor: pointer; line-height: 1; transition: color 0.3s;
+        }
+
+        .hot-modal-close:hover { color: #999; }
+
+        /* --- 10. RWD --- */
+        @media (max-width: 768px) {
+            .background-image { background-image: url('GRAPH/tlo_mobile.webp') !important; }
+            .fullscreen-nav {
+                padding: 100px 16px 30px;
+            }
+            .nav-list li {
+                margin: 18px 0;
+            }
+            .content-container {
+                padding: 80px 20px 80px 20px;
+                align-items: center;
+                text-align: center;
+            }
+            .logo-row { justify-content: space-between; padding: 10px 20px; }
+            .logo-row.scrolled { padding: 5px 20px; }
+            .main-content { align-items: center; margin-top: 20px; }
+            h2 { text-align: center; }
+            .footer-lastline { flex-direction: column; row-gap: 6px; }
+            .footer-tagline { position: static; transform: none; font-size: 1.5rem; }
+        }
+
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+    </style>
+</head>
+<body>
+
+    <header class="sr-only">
+        <h1>XperiBase PL</h1>
+    </header>
+
+    <div class="background-image" role="img" aria-label="Abstrakcyjne tło artystyczne."></div>
+    <div class="contrast-overlay"></div>
+
+    <main class="content-container">
+        <!-- FIXED HEADER -->
+        <div class="logo-row" id="header">
+            <a href="index.html" aria-label="Strona główna XperiBase">
+                <img src="GRAPH/xperibase_blanc.png" alt="Logo XperiBase Studio" class="main-logo">
+            </a>
+
+            <button class="hamburger-menu"
+                    aria-label="Przełącz menu nawigacji"
+                    aria-expanded="false"
+                    aria-controls="main-nav"
+                    id="menuBtn">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+
+        <div class="main-content">
+            <h2>
+                PLATFORMA MULTISENSORYCZNA:
+                <span class="hero-subtitle">
+                    Nowy standard dostępności i doświadczeń –<br> 
+                    w kulturze, sztuce, edukacji i przestrzeniach publicznych.
+                </span>
+            </h2>
+        </div>
+
+        <footer class="legal-footer">
+            <p>
+                XperiBase Spółka z o.o. <span class="nip-regon">NIP: 741-217-51-61 | REGON: 543600515</span>
+            </p>
+            <p>
+                15-540 Białystok, ul. Żurawia 71, Polska
+            </p>
+            <p>
+                <a href="mailto:contact@xperibase.com">contact@xperibase.com</a>
+            </p>
+
+            <div class="footer-lastline">
+                <h1 class="footer-tagline">Sztuka ożywiana dotykiem.</h1>
+                <div class="footer-copyright">&copy; 2026 XperiBase Sp. z o.o. Wszelkie prawa zastrzeżone.</div>
+            </div>
+        </footer>
+
+        <!-- LEWY DOLNY RÓG -->
+        <button onclick="openHotModal()" class="hot-logo-btn" aria-label="Informacja o projekcie Hub of Talents">
+            <img src="GRAPH/Hub_OF_Talents.webp" alt="Logo Hub of Talents" class="hot-logo">
+        </button>
+    </main>
+
+    <!-- MENU OVERLAY -->
+    <nav id="main-nav" class="fullscreen-nav" aria-label="Nawigacja główna">
+        <ul class="nav-list">
+            <li><a href="index.html">Start</a></li>
+            <li><a href="mission.html">Misja</a></li>
+            <li><a href="project.html">Projekt</a></li>
+            <li><a href="development.html">Proces B+R</a></li>
+            <li><a href="team.html">Zespół</a></li>
+            <li><a href="gallery.html">Galeria</a></li>
+            <li><a href="education.html">Edukacja</a></li>
+            <li><a href="partnership.html">Partnerstwo</a></li>
+            <li><a href="survey.html">Twój głos</a></li>
+        </ul>
+    </nav>
+
+    <!-- MODAL HUB OF TALENTS -->
+    <div id="hotModal" class="hot-modal-overlay" aria-hidden="true" role="dialog">
+        <div class="hot-modal-content">
+            <button class="hot-modal-close" aria-label="Zamknij okno" onclick="closeHotModal()">&times;</button>
+            <h3>Informacja o projekcie</h3>
+            <p>Projekt XperiBase jest rozwijany w ramach programu Hub of Talents 3, realizowanego przez Białostocki Park Naukowo-Technologiczny.</p>
+            <p>Program wspiera rozwój innowacyjnych przedsięwzięć technologicznych w Polsce Wschodniej poprzez inkubację startupów oraz wsparcie eksperckie i biznesowe.</p>
+            <p>👉 <a href="https://bpnt.bialystok.pl/projekty-lista/platforma-startowa-dla-nowych-pomyslow-hub-of-talents-3/" target="_blank" rel="noopener noreferrer">Dowiedz się więcej o programie</a></p>
+        </div>
+    </div>
+
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const nav = document.getElementById('main-nav');
+        const header = document.getElementById('header');
+        const menuLinks = nav.querySelectorAll('a');
+        let isMenuOpen = false;
+
+        // SCROLL LOGIC
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // MENU LOGIC
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            menuBtn.classList.toggle('active');
+            nav.classList.toggle('open');
+            menuBtn.setAttribute('aria-expanded', isMenuOpen);
+            document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        menuLinks.forEach(link => link.addEventListener('click', () => { if (isMenuOpen) toggleMenu(); }));
+
+        // MODAL LOGIC
+        const hotModal = document.getElementById('hotModal');
+        function openHotModal() {
+            hotModal.classList.add('open');
+            document.body.style.overflow = 'hidden'; 
+        }
+        function closeHotModal() {
+            hotModal.classList.remove('open');
+            if (!isMenuOpen) document.body.style.overflow = ''; 
+        }
+        hotModal.addEventListener('click', (e) => { if (e.target === hotModal) closeHotModal(); });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (hotModal.classList.contains('open')) closeHotModal();
+                else if (isMenuOpen) toggleMenu();
+            }
+        });
+    </script>
+</body>
+</html>
